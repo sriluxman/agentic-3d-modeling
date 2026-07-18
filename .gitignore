@@ -1,0 +1,4 @@
+exports/
+*.FCStd1
+__pycache__/
+.venv/
