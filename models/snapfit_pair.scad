@@ -25,6 +25,7 @@ base_thickness = 3;
 wall = 2.4;
 socket_length = 26;
 socket_entry_chamfer = 2;
+labels_enabled = false;
 
 module label(txt, size = 4) {
     linear_extrude(height = 0.45)
@@ -48,13 +49,14 @@ module plug() {
     translate([8, plate_y / 2 - beam_width / 2, base_thickness]) {
         cube([beam_length, beam_width, beam_thickness]);
 
-        translate([beam_length - hook_length, 0, beam_thickness])
-            rotate([0, -15, 0])
-                cube([hook_length + 0.8, beam_width, hook_height]);
+        translate([beam_length - hook_length, 0, beam_thickness - 0.15])
+            cube([hook_length, beam_width, hook_height + 0.15]);
     }
 
-    translate([24, plate_y / 2, base_thickness - 0.05])
-        label(str("plug C", clearance), 3.4);
+    if (labels_enabled) {
+        translate([24, plate_y / 2, base_thickness - 0.05])
+            label(str("plug C", clearance), 3.4);
+    }
 }
 
 module socket_cutout(inner_w, inner_h) {
@@ -88,8 +90,10 @@ module socket() {
         }
     }
 
-    translate([22, plate_y / 2, base_thickness - 0.05])
-        label(str("socket C", clearance), 3.1);
+    if (labels_enabled) {
+        translate([22, plate_y / 2, base_thickness - 0.05])
+            label(str("socket C", clearance), 3.1);
+    }
 }
 
 module both_preview() {
