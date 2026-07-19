@@ -25,6 +25,8 @@ python -m venv .venv
 
 Artifacts and `report.json` are written under `exports/python/<design>/`.
 
+For a new printer, material, or process profile, run `scripts/export-jointscad-dovetail.ps1` and follow `docs/sliding_fit_calibration.md` before generating sliding interfaces.
+
 ## Model Contract
 
 A Python model exposes `build_design(profile) -> DesignSpec` and returns:

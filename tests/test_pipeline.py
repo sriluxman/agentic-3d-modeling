@@ -11,8 +11,12 @@ def test_profile_is_complete() -> None:
     profile = load_profile(ROOT / "profiles" / "elegoo_cc2_pla.json")
     assert profile["printer"]["nozzle_diameter_mm"] == 0.4
     assert profile["material"]["type"] == "PLA+"
-    assert profile["measured_calibration"]["xy_clearance_sliding_mm"] == 0.15
+    assert profile["measured_calibration"]["xy_clearance_sliding_mm"] == 0.25
     assert profile["measured_calibration"]["xy_clearance_sliding_basis"] == "per_side"
+    assert profile["measured_calibration"]["xy_clearance_sliding_evaluated_state"] == (
+        "fully_cooled_off_build_plate"
+    )
+    assert len(profile["measured_calibration"]["xy_clearance_sliding_observations"]) == 3
 
 
 def test_fit_calibration_pipeline(tmp_path: Path) -> None:

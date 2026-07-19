@@ -10,7 +10,8 @@ use <../components/vendor/jointscad/DovetailJoint.scad>
 $fn = 32;
 part_id = 0; // 0 = print plate, 1 = receiver rack, 2 = key, 3 = assembly preview
 
-clearances = [0.15, 0.25, 0.35]; // Per-side XY clearance in mm.
+// Per-side XY clearance: 1 dimple = 0.15, 2 = 0.25, 3 = 0.35 mm.
+clearances = [0.15, 0.25, 0.35];
 joint_dimensions = [10, 5, 6];
 receiver_dimensions = [10, 8, 6];
 receiver_gap = 2;
