@@ -14,4 +14,6 @@ Each design produces source geometry, exports, a validation report, and physical
 8. **Agent report**: `pass`, `fail`, `warning`, or `not_run` for every gate, with actionable parameter changes.
 9. **Physical calibration**: print, cool, measure, and write results back to the profile using the reusable [sliding-fit calibration](sliding_fit_calibration.md) where applicable.
 
+Assembly orientation and print orientation are separate concerns. Thin covers should place their largest uninterrupted face on the bed; generated G-code must confirm the declared temperatures, supports, and any required brim instead of trusting preset names.
+
 The current implementation lives in `src/agentic_cad/`. Heavy evaluators remain optional workers so the normal loop stays practical on an 8 GB machine.

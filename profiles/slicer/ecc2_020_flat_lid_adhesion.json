@@ -1,0 +1,10 @@
+{
+  "type": "process",
+  "name": "0.20mm Flat Lid Adhesion @ECC2 0.4 nozzle",
+  "inherits": "0.20mm Standard @Elegoo CC2 0.4 nozzle",
+  "from": "User",
+  "compatible_printers": ["Elegoo Centauri Carbon 2 0.4 nozzle"],
+  "brim_type": "outer_only",
+  "brim_width": "5",
+  "brim_object_gap": "0"
+}

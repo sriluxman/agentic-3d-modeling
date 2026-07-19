@@ -158,7 +158,7 @@
     {
       "id": "agentic-sliding-lid-box",
       "name": "Parametric Sliding-Lid Box",
-      "description": "Support-free build123d enclosure with a full-footprint recessed lid, concealed calibrated sliding tongue, insertion path, and editable dimensions.",
+      "description": "Support-free build123d enclosure with a full-footprint flat lid, concealed calibrated sliding tongue, separate assembly/print orientations, insertion path, and editable dimensions.",
       "engines": ["build123d", "python", "step"],
       "categories": ["enclosure", "container", "component"],
       "interfaces": ["sliding-lid", "lid-rail", "stacking-recess"],
@@ -170,10 +170,10 @@
         "attribution": "agentic-3d-modeling project"
       },
       "evidence": {
-        "automated": "SKADIS box composition passes B-rep, STEP round-trip, mesh, sampled lid insertion, and ElegooSlicer checks.",
+        "automated": "SKADIS box composition passes B-rep, STEP round-trip, mesh, sampled lid insertion, and ElegooSlicer checks. The lid-specific process enforces face-down orientation, 220/60 C, a 5 mm brim, and no supports.",
         "model": "models/python/skadis_sliding_box.py",
         "profile": "profiles/elegoo_cc2_pla.json",
-        "physical": "pending"
+        "physical": "Box body and T-clips printed successfully. The first recessed lid failed from a tongue-down perimeter overhang and warping; the flat face-down replacement is pending physical validation."
       }
     },
     {

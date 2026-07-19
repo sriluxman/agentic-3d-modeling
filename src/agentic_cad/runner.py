@@ -78,14 +78,23 @@ def run(
     for part in design.parts:
         step_path = output_dir / f"{part.name}.step"
         stl_path = output_dir / f"{part.name}.stl"
+        assembly_stl_path = output_dir / f"{part.name}_assembly.stl"
         export_step(part.shape, step_path)
-        export_stl(part.shape, stl_path, tolerance=0.02, angular_tolerance=0.1)
+        print_shape = part.print_shape if part.print_shape is not None else part.shape
+        export_stl(print_shape, stl_path, tolerance=0.02, angular_tolerance=0.1)
+        if part.print_shape is not None:
+            export_stl(part.shape, assembly_stl_path, tolerance=0.02, angular_tolerance=0.1)
 
         b_checks, b_metrics = brep_checks(part)
         m_checks, m_metrics = mesh_checks(stl_path, part)
         freecad_result = validate_step(step_path, output_dir / f"{part.name}.freecad.json", part)
         slicer_result = (
-            slice_stl(stl_path, output_dir / "slicer" / part.name, profile)
+            slice_stl(
+                stl_path,
+                output_dir / "slicer" / part.name,
+                profile,
+                process_preset_project_relative=part.slicer_process_preset_project_relative,
+            )
             if enable_slicer
             else {"status": "not_run", "reason": "Disabled by caller"}
         )
@@ -93,10 +102,14 @@ def run(
         statuses.extend(item["status"] for item in checks)
         statuses.append(freecad_result["status"])
         statuses.append(slicer_result["status"])
+        artifacts = {"step": str(step_path), "stl": str(stl_path)}
+        if part.print_shape is not None:
+            artifacts["assembly_stl"] = str(assembly_stl_path)
         report["parts"].append(
             {
                 "name": part.name,
-                "artifacts": {"step": str(step_path), "stl": str(stl_path)},
+                "artifacts": artifacts,
+                "print_orientation": "custom" if part.print_shape is not None else "cad_default",
                 "checks": checks,
                 "brep_metrics": b_metrics,
                 "mesh_metrics": m_metrics,

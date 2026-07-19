@@ -14,6 +14,8 @@ class PartSpec:
     expected_bodies: int = 1
     bbox_tolerance_mm: float = 0.05
     preferred_build_up: tuple[int, int, int] = (0, 0, 1)
+    print_shape: Shape | None = None
+    slicer_process_preset_project_relative: str | None = None
 
 
 @dataclass(frozen=True)

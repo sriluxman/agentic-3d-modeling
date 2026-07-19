@@ -13,8 +13,8 @@ class SlidingLidBoxParameters:
     wall_mm: float = 2.0
     back_wall_mm: float = 2.0
     lid_thickness_mm: float = 1.6
-    lid_cover_floor_mm: float = 1.4
-    lid_recess_depth_mm: float = 0.8
+    lid_cover_floor_mm: float = 2.0
+    lid_recess_depth_mm: float = 0.0
     lid_recess_border_mm: float = 1.6
     support_rail_depth_mm: float = 2.5
     front_rail_depth_mm: float = 1.2

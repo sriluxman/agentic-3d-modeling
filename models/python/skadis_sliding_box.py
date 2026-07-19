@@ -5,10 +5,18 @@ from pathlib import Path
 
 from agentic_cad.components.enclosures import SlidingLidBoxParameters, build_sliding_lid_box
 from agentic_cad.components.skadis import embed_t_clip_seats
+from build123d import Pos, Rot, Shape
+
 from agentic_cad.contracts import DesignCheckSpec, DesignSpec, MotionSpec, PartSpec
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def lid_cover_face_down(shape: Shape) -> Shape:
+    rotated = Rot(180, 0, 0) * shape
+    minimum = rotated.bounding_box().min
+    return Pos(-minimum.X, -minimum.Y, -minimum.Z) * rotated
 
 
 @dataclass(frozen=True)
@@ -49,12 +57,19 @@ def build_design(profile: dict, params: SkadisBoxParameters = SkadisBoxParameter
                 embedded.shape,
                 expected_bbox_mm=(enclosure.width_mm, enclosure.height_mm, enclosure.depth_mm),
             ),
-            PartSpec("sliding_lid", box.lid, expected_bbox_mm=box.lid_bbox_mm),
+            PartSpec(
+                "sliding_lid",
+                box.lid,
+                expected_bbox_mm=box.lid_bbox_mm,
+                print_shape=lid_cover_face_down(box.lid),
+                slicer_process_preset_project_relative="profiles/slicer/ecc2_020_flat_lid_adhesion.json",
+            ),
         ),
         parameters={
             "outer_dimensions_mm": [enclosure.width_mm, enclosure.height_mm, enclosure.depth_mm],
             "wall_mm": enclosure.wall_mm,
-            "lid_style": "full_footprint_recessed_stackable",
+            "lid_style": "full_footprint_flat_print_optimized",
+            "lid_print_orientation": "cover_face_down",
             "lid_tongue_thickness_mm": enclosure.lid_thickness_mm,
             "lid_cover_floor_mm": enclosure.lid_cover_floor_mm,
             "lid_recess_depth_mm": enclosure.lid_recess_depth_mm,
