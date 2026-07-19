@@ -21,13 +21,15 @@ SLOT_LENGTH = 15.0
 SLOT_PITCH = 40.0
 BOARD_THICKNESS = 5.1
 
-# T-clip replica (measured from vendor STL; stem sized for twist clearance)
+# T-clip replica (measured from vendor STL). Stem and foot are derived from
+# the profile's measured sliding clearance at build time; the vendor's own
+# 4.9 stem / 14.8 foot correspond to ~0.05-0.1 per side, which the dovetail
+# calibration showed cannot insert on this printer once cooled.
 CLIP_THICKNESS = 4.8
 BAR_LENGTH = 28.3
 BAR_HEIGHT = 5.6
-STEM_DIAMETER = 4.9
-FOOT_LENGTH = 14.8
 FOOT_HEIGHT = 5.0
+DEFAULT_CLEARANCE = 0.25  # per side; prefer profile measured_calibration
 
 # Standoff a design should keep between its back wall and the board so the
 # stem engagement matches the clip (vendor part is 5.4 mm thick at the seat).
@@ -66,36 +68,46 @@ def board_coupon(
     return board
 
 
-def seat_boss(standoff: float = 3.0) -> Shape:
+def seat_boss(standoff: float = 3.0, diameter: float = SEAT_DIAMETER) -> Shape:
     """Cylindrical seat boss to union onto a design's back wall: axis along Y
     from y=0 (wall exterior) to y=standoff (board contact face). Cut the slot
     separately with rounded_slot through wall + boss."""
     return Rot(-90, 0, 0) * Cylinder(
-        SEAT_DIAMETER / 2, standoff, align=(Align.CENTER, Align.CENTER, Align.MIN)
+        diameter / 2, standoff, align=(Align.CENTER, Align.CENTER, Align.MIN)
     )
 
 
-def t_clip(stem_length: float) -> Shape:
+def t_clip(
+    stem_length: float,
+    clearance_per_side: float = DEFAULT_CLEARANCE,
+    bar_length: float = BAR_LENGTH,
+) -> Shape:
     """T-clip replica in insertion orientation, ready to travel along +Y.
 
     Origin: stem axis at x=0, z=0; bar front face at y=0. Bar and foot lie in
     the vertical plane (long axes along Z) so the foot passes through a
     vertical slot; a 90 degree twist about the stem axis locks it.
     ``stem_length`` spans bar underside to foot top: wall + standoff + board
-    + slack. The vendor part is printed flat; this replica is the motion-check
-    surrogate with identical functional envelope.
+    + slack. ``clearance_per_side`` sizes the stem and foot against the 5 x 15
+    slot (use the profile's measured sliding clearance). ``bar_length`` may be
+    shortened (>= slot length + 4) so the bar can rotate inside low enclosures.
+    The vendor part is printed flat; this replica shares its functional envelope.
     """
+    if bar_length < SLOT_LENGTH + 4:
+        raise ValueError(f"bar_length must be >= {SLOT_LENGTH + 4} to lock across the slot")
+    stem_diameter = SLOT_WIDTH - 2 * clearance_per_side
+    foot_length = SLOT_LENGTH - 2 * clearance_per_side
     bar = Box(
-        CLIP_THICKNESS, BAR_HEIGHT, BAR_LENGTH,
+        CLIP_THICKNESS, BAR_HEIGHT, bar_length,
         align=(Align.CENTER, Align.MIN, Align.CENTER),
     )
     stem = Pos(0, BAR_HEIGHT, 0) * Rot(-90, 0, 0) * Cylinder(
-        STEM_DIAMETER / 2, stem_length, align=(Align.CENTER, Align.CENTER, Align.MIN)
+        stem_diameter / 2, stem_length, align=(Align.CENTER, Align.CENTER, Align.MIN)
     )
     # Stadium-profile foot: rounded ends so it clears the slot's end arcs
     # (a square-cornered foot collides with the rounded slot - the motion
     # check caught exactly that on the first attempt).
-    straight = FOOT_LENGTH - CLIP_THICKNESS
+    straight = foot_length - CLIP_THICKNESS
     foot = Box(
         CLIP_THICKNESS, FOOT_HEIGHT, straight,
         align=(Align.CENTER, Align.MIN, Align.CENTER),

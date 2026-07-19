@@ -23,7 +23,7 @@ Build functional models through a reuse-first engineering loop. Treat a printabl
 9. Run `agentic-cad <model> --profile profiles/elegoo_cc2_pla.json --output <directory> --png`. Treat `fail` as blocking and `not_run` as missing evidence, not success.
 10. Look at the evidence, not just the numbers: open the generated `<part>.views.png` and `<part>.sections.png` (or the SVGs / `report.html`). A misplaced boolean or mirrored feature is visible in one glance and invisible in a bounding-box tuple. Then inspect STEP and STL checks, self-intersection and wall-thickness results, measured clearances, collision samples, orientation, and the slicer pass.
 11. When a parameter is uncertain (wall, clearance, opening angle), do not guess-and-pray: run `agentic-cad-study <model> --profile <profile> --set "name=v1,v2,..." --minimize total_volume_mm3` and take the recommended feasible candidate. Read `study.md` for exactly which checks rejected each alternative.
-12. Revise geometry and rerun until the report passes; the run report (`report.json`, `report.html`) is the deliverable alongside the model source.
+12. When the user gives feedback, hand them the run's `annotate.html`: their exported `annotations.json` pins map each comment to a part, view, and mm offset - load it with `agentic_cad.annotate.load_annotations` and fix exactly what was pointed at. Revise geometry and rerun until the report passes; the run report (`report.json`, `report.html`) is the deliverable alongside the model source.
 13. Print the smallest representative coupon first. Record measured clearance, failure mode, material, orientation, and profile. Promote a component to `physically_validated` only after a real print succeeds.
 
 ## Reuse Decisions

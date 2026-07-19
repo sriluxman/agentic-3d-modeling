@@ -53,9 +53,22 @@ class ClearanceSpec:
 
 
 @dataclass(frozen=True)
+class DesignCheckSpec:
+    """Model-computed check (ported from Codex's main-branch design): lets a
+    model assert domain facts the generic gates cannot know, e.g. probe
+    volumes proving a slot stayed open after a boolean."""
+
+    name: str
+    passed: bool
+    measured: Any = None
+    expected: Any = None
+
+
+@dataclass(frozen=True)
 class DesignSpec:
     name: str
     parts: tuple[PartSpec, ...]
     parameters: dict[str, Any] = field(default_factory=dict)
     motions: tuple[MotionSpec, ...] = ()
     clearances: tuple[ClearanceSpec, ...] = ()
+    checks: tuple[DesignCheckSpec, ...] = ()

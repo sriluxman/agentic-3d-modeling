@@ -24,9 +24,31 @@
     "bed_temperature_c": 60
   },
   "measured_calibration": {
-    "xy_clearance_sliding_mm": 0.15,
+    "xy_clearance_sliding_mm": 0.25,
     "xy_clearance_sliding_basis": "per_side",
-    "xy_clearance_sliding_observation": "JointSCAD dovetail: 0.15 mm slides acceptably; 0.25 mm is loose; 0.35 mm is loose and wobbles. Sliding fit provides no retention when inverted.",
+    "xy_clearance_sliding_fit": "tight_sliding",
+    "xy_clearance_sliding_evaluated_state": "fully_cooled_off_build_plate",
+    "xy_clearance_sliding_coupon": "models/jointscad_dovetail_coupon.scad",
+    "xy_clearance_sliding_observations": [
+      {
+        "clearance_mm_per_side": 0.15,
+        "marker_dimples": 1,
+        "result": "cannot_insert"
+      },
+      {
+        "clearance_mm_per_side": 0.25,
+        "marker_dimples": 2,
+        "result": "tight_sliding",
+        "note": "Perfect tight fit after cooling."
+      },
+      {
+        "clearance_mm_per_side": 0.35,
+        "marker_dimples": 3,
+        "result": "loose",
+        "note": "Inserts but is slightly loose after cooling."
+      }
+    ],
+    "xy_clearance_sliding_observation": "Canonical result measured after the PLA+ coupon fully cooled off the build plate. Earlier hot testing understated the required clearance.",
     "xy_clearance_snap_mm": null,
     "hole_compensation_mm": null,
     "elephants_foot_compensation_mm": null
@@ -47,5 +69,5 @@
     "estimated_time_seconds": 726,
     "filament_used_g": 5.45
   },
-  "notes": "Defaults extracted from ECC2_0.4_library_clip_Elegoo PLA+ _0.2_12m6s.gcode. Measured calibration stays null until physically tested."
+  "notes": "Defaults extracted from ECC2_0.4_library_clip_Elegoo PLA+ _0.2_12m6s.gcode. Sliding clearance was physically calibrated with the reusable JointSCAD dovetail coupon."
 }

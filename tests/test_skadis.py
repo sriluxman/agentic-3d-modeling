@@ -23,7 +23,7 @@ def test_t_clip_replica_envelope() -> None:
     clip = skadis.t_clip(skadis.stem_length_for(wall=2.4, standoff=3.0))
     bbox = clip.bounding_box().size
     assert abs(bbox.Z - skadis.BAR_LENGTH) < 1e-6
-    assert abs(bbox.X - max(skadis.CLIP_THICKNESS, skadis.STEM_DIAMETER)) < 1e-6
+    assert abs(bbox.X - skadis.CLIP_THICKNESS) < 1e-6
     assert len(clip.solids()) == 1
 
 
@@ -107,3 +107,24 @@ def test_container_rejects_impossible_height(tmp_path: Path) -> None:
             enable_freecad=False,
             overrides={"height_mm": 60.0},
         )
+
+
+def test_skadis_slide_box_pipeline(tmp_path: Path) -> None:
+    _, report = run(
+        ROOT / "models" / "python" / "skadis_slide_box.py",
+        ROOT / "profiles" / "elegoo_cc2_pla.json",
+        tmp_path,
+        enable_slicer=False,
+        enable_render=False,
+        enable_freecad=False,
+    )
+    assert report["status"] == "pass"
+    assert {part["name"] for part in report["parts"]} == {"box_body", "sliding_lid", "t_clip"}
+    # lid slides on TOP along the long axis - the original mechanism
+    assert report["parameters"]["lid_style"].startswith("original_top_slide")
+    # clearances come from the physically measured calibration
+    assert report["parameters"]["sliding_clearance_mm_per_side"] == 0.25
+    probe = next(c for c in report["design_checks"] if c["name"] == "clip_seat_slots_through_open")
+    assert probe["status"] == "pass"
+    twist = next(m for m in report["motion_checks"] if m["name"] == "t_clip_insert_and_twist_lock")
+    assert twist["status"] == "pass" and twist["samples"][-1]["rotation_deg"] == 90.0

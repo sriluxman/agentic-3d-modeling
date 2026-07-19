@@ -30,7 +30,8 @@ DEFAULTS: dict[str, Any] = {
     "depth_mm": 40.0,
     "height_mm": 80.0,
     "wall_mm": 2.4,
-    "lid_clearance_mm": 0.2,
+    # None -> use the profile's physically measured sliding clearance
+    "lid_clearance_mm": None,
     "seat_standoff_mm": 3.0,
 }
 
@@ -49,6 +50,9 @@ def build_design(profile: dict, overrides: dict[str, Any] | None = None) -> Desi
     depth = parameters["depth_mm"]
     height = parameters["height_mm"]
     wall = parameters["wall_mm"]
+    measured = profile["measured_calibration"]["xy_clearance_sliding_mm"]
+    if parameters["lid_clearance_mm"] is None:
+        parameters["lid_clearance_mm"] = measured
     clearance = parameters["lid_clearance_mm"]
     standoff = parameters["seat_standoff_mm"]
 
@@ -106,7 +110,7 @@ def build_design(profile: dict, overrides: dict[str, Any] | None = None) -> Desi
         width / 2,
         depth - wall - 0.1 - skadis.BAR_HEIGHT,
         seat_high_z,
-    ) * skadis.t_clip(stem_length)
+    ) * skadis.t_clip(stem_length, clearance_per_side=measured)
     stem_axis = ((width / 2, 0.0, seat_high_z), (0.0, 1.0, 0.0))
     clip_locked = clip_seated.rotate(Axis(stem_axis[0], stem_axis[1]), 90)
 
@@ -148,7 +152,7 @@ def build_design(profile: dict, overrides: dict[str, Any] | None = None) -> Desi
                 "t_clip",
                 clip_seated,
                 expected_bbox_mm=(
-                    max(skadis.CLIP_THICKNESS, skadis.STEM_DIAMETER),
+                    skadis.CLIP_THICKNESS,
                     skadis.BAR_HEIGHT + stem_length + skadis.FOOT_HEIGHT,
                     skadis.BAR_LENGTH,
                 ),

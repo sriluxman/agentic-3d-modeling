@@ -10,6 +10,7 @@ from typing import Any
 
 from build123d import export_step, export_stl
 
+from .annotate import write_annotate_html
 from .contracts import DesignSpec
 from .evaluate import brep_checks, clearance_check, mesh_checks, motion_check
 from .freecad import validate_step
@@ -69,6 +70,7 @@ def run(
         "parameters": design.parameters,
         "overrides": overrides or {},
         "parts": [],
+        "design_checks": [],
         "motion_checks": [],
         "clearance_checks": [],
         "unavailable_checks": [
@@ -128,6 +130,18 @@ def run(
             }
         )
 
+    for design_check in design.checks:
+        result = {
+            "name": design_check.name,
+            "status": "pass" if design_check.passed else "fail",
+        }
+        if design_check.measured is not None:
+            result["measured"] = design_check.measured
+        if design_check.expected is not None:
+            result["expected"] = design_check.expected
+        statuses.append(result["status"])
+        report["design_checks"].append(result)
+
     for motion in design.motions:
         result = motion_check(motion)
         statuses.append(result["status"])
@@ -143,4 +157,7 @@ def run(
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     if enable_render:
         report["html_report"] = str(write_html_report(report, output_dir))
+        annotate_path = write_annotate_html(report, output_dir)
+        if annotate_path is not None:
+            report["annotate_html"] = str(annotate_path)
     return report_path, report

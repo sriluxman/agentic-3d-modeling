@@ -23,6 +23,7 @@ Reusable, agent-first tooling for generating functional CAD and rejecting bad ge
 - mid-plane cross-section SVGs exposing internal walls and fits
 - optional PNG rasterization via a local headless Edge/Chrome (`--png`) so multimodal agents can look at parts directly
 - self-contained `report.html` design review: renders inline, every check color-coded, motion clearance tables
+- `annotate.html` per run: the user pins comments onto the views; exported `annotations.json` carries part, view, and mm offsets so the agent maps every remark to an exact model region (`agentic_cad.annotate.load_annotations`)
 
 ## Iteration
 
@@ -34,6 +35,10 @@ agentic-cad-study models/python/cable_clip.py --profile profiles/elegoo_cc2_pla.
 ```
 
 The study writes `study.json` and a `study.md` table with per-case failed checks, and recommends the best feasible candidate. FreeCAD round-trip and slicing stay out of the inner loop; run them once on the chosen design.
+
+## Design journey
+
+The full idea-to-product workflow for non-CAD users (intake, 2D concepting, reuse, evidence, annotation, studies, release) is described in `docs/design_journey.md`. Clearances always come from the profile's physically measured calibration (`docs/sliding_fit_calibration.md`): 0.25 mm per side tight-sliding on this printer, cooled - 0.15 cannot insert. OpenSCAD libraries (BOSL2, SnapLib, ...) plug in via `agentic_cad.openscad.render_scad`.
 
 ## Run
 
