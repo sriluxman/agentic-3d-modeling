@@ -199,6 +199,28 @@
         "profile": "profiles/elegoo_cc2_pla.json",
         "physical": "pending on local printer and board"
       }
+    },
+    {
+      "id": "agentic-skadis-micro-cassette",
+      "name": "Personalized SKADIS Micro-Cassette",
+      "description": "Support-free wall cassette with a filament-pin knuckle hinge, removable rabbit clip, calibrated dovetail divider, embossed label, and community SKADIS T-clip seats.",
+      "engines": ["openscad", "python", "mesh"],
+      "categories": ["enclosure", "assembly", "pegboard", "mechanism"],
+      "interfaces": ["knuckle-hinge", "rabbit-clip", "dovetail-divider", "skadis-t-clip"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "motion-envelope", "personalized-label", "slicer-time-gate"],
+      "status": "automatically_validated",
+      "source": {
+        "local_path": "models/skadis_micro_cassette.scad",
+        "license": "Project internal",
+        "attribution": "agentic-3d-modeling project; BOSL2, JointSCAD, and Line Arc Line components"
+      },
+      "evidence": {
+        "automated": "All four production meshes pass solid/body and support-free ElegooSlicer checks; closed and 95-degree-open collision volumes remain below 0.01 mm3; estimated production time is below one hour at 0.28 mm.",
+        "export": "scripts/export-skadis-micro-cassette.ps1",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "preflight": "Part 7 reproduces both production latch sockets and the BOSL2 double rabbit clip.",
+        "physical": "pending"
+      }
     }
   ]
 }

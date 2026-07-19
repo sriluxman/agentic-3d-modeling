@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "libraries": [
+    {
+      "name": "BOSL2",
+      "url": "https://github.com/BelfrySCAD/BOSL2.git",
+      "version": "v2.0.741",
+      "commit": "881947c32a28fa68049b518dcc1e73202bfc2c7c",
+      "install_path": ".cad-libs/BOSL2"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "process",
+  "name": "0.28mm Functional Draft @ECC2 0.4 nozzle",
+  "inherits": "0.20mm Standard @Elegoo CC2 0.4 nozzle",
+  "from": "User",
+  "compatible_printers": ["Elegoo Centauri Carbon 2 0.4 nozzle"],
+  "layer_height": "0.28",
+  "initial_layer_print_height": "0.24"
+}

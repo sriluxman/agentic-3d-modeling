@@ -19,6 +19,7 @@ def evaluate_stl(
     *,
     expected_bodies: int = 1,
     enable_slicer: bool = True,
+    process_preset_project_relative: str | None = None,
 ) -> tuple[Path, dict[str, Any]]:
     profile = load_profile(profile_path)
     loaded = trimesh.load_mesh(stl_path, force="mesh", process=True, validate=True)
@@ -45,7 +46,12 @@ def evaluate_stl(
         },
     ]
     slicer = (
-        slice_stl(stl_path, output_dir / "slicer", profile)
+        slice_stl(
+            stl_path,
+            output_dir / "slicer",
+            profile,
+            process_preset_project_relative=process_preset_project_relative,
+        )
         if enable_slicer
         else {"status": "not_run", "reason": "Disabled by caller"}
     )
@@ -55,6 +61,7 @@ def evaluate_stl(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source_stl": str(stl_path),
         "printer_profile": str(profile_path),
+        "process_preset": process_preset_project_relative,
         "checks": checks,
         "metrics": {
             "triangles": len(loaded.faces),
