@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineer Functional CAD"
+  short_description: "Reuse, generate, and validate functional CAD"
+  default_prompt: "Use $engineer-functional-cad to find reusable components, generate the model, and validate it for printing."

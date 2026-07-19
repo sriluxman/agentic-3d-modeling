@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "reuse_before_generation": true,
+    "remote_libraries_are_indexed_not_vendored": true,
+    "license_metadata_is_required": true
+  },
+  "components": [
+    {
+      "id": "fpetrac-snaplib-0.36",
+      "name": "Simple Snap-Fit Joints Library",
+      "description": "Dimensioned cantilever and ring snap-fit generators with mating snap-hole helpers.",
+      "engines": ["openscad"],
+      "categories": ["joint", "snap-fit", "compliant-mechanism"],
+      "interfaces": ["cantilever-snap", "snap-receiver", "ring-snap"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "material-strain-input"],
+      "status": "physically_validated",
+      "source": {
+        "url": "https://www.thingiverse.com/thing:1860118",
+        "local_path": "docs/snapfit-know-hows/simple-snapfit-joints-lib/files/SnapLib.0.36.scad",
+        "license": "CC-BY-NC",
+        "attribution": "Fausto Petraccone (fpetrac)"
+      },
+      "evidence": {
+        "physical": "Library-based clip printed successfully on Elegoo Centauri Carbon 2 with Elegoo PLA+.",
+        "profile": "profiles/elegoo_cc2_pla.json"
+      }
+    },
+    {
+      "id": "bosl2",
+      "name": "BOSL2",
+      "description": "Broad OpenSCAD mechanical library including joiners, hinges, sliders, clips, gears, fasteners, and threads.",
+      "engines": ["openscad"],
+      "categories": ["joint", "fastener", "mechanism", "hardware", "enclosure"],
+      "interfaces": ["dovetail", "hinge", "slider", "hook", "thread", "gear"],
+      "capabilities": ["parametric-source", "attachable-parts", "mechanical-primitives"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/BelfrySCAD/BOSL2",
+        "license": "BSD-2-Clause",
+        "attribution": "BelfrySCAD contributors"
+      }
+    },
+    {
+      "id": "mcad",
+      "name": "MCAD",
+      "description": "OpenSCAD mechanical components including gears, bearings, motors, nuts, bolts, and boxes.",
+      "engines": ["openscad"],
+      "categories": ["fastener", "mechanism", "hardware", "enclosure"],
+      "interfaces": ["gear", "bearing", "bolt", "nut", "stepper-motor"],
+      "capabilities": ["parametric-source", "mechanical-primitives"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/openscad/MCAD",
+        "license": "LGPL-2.1",
+        "attribution": "OpenSCAD MCAD contributors"
+      }
+    },
+    {
+      "id": "nopscadlib",
+      "name": "NopSCADlib",
+      "description": "OpenSCAD parts library and framework for assemblies, bills of materials, and fabrication outputs.",
+      "engines": ["openscad"],
+      "categories": ["hardware", "assembly", "enclosure", "fabrication"],
+      "interfaces": ["vitamin", "assembly", "printed-part"],
+      "capabilities": ["parametric-source", "assembly-framework", "bill-of-materials"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/nophead/NopSCADlib",
+        "license": "GPL-3.0",
+        "attribution": "Chris Palmer and NopSCADlib contributors"
+      }
+    },
+    {
+      "id": "jointscad",
+      "name": "JointSCAD",
+      "description": "Parametric OpenSCAD joinery for dovetail, finger, dowel, mortise-and-tenon, bridle, and scarf joints.",
+      "engines": ["openscad"],
+      "categories": ["joint", "joinery"],
+      "interfaces": ["dovetail", "finger-joint", "dowel", "mortise-tenon", "bridle", "scarf"],
+      "capabilities": ["parametric-source", "paired-mating-geometry"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/HopefulLlama/JointSCAD",
+        "license": "MIT",
+        "attribution": "HopefulLlama and JointSCAD contributors"
+      }
+    },
+    {
+      "id": "bd-warehouse",
+      "name": "bd_warehouse",
+      "description": "Collection of parametric build123d parts that can produce editable B-rep and mesh exports.",
+      "engines": ["build123d", "python"],
+      "categories": ["hardware", "fastener", "component"],
+      "interfaces": ["bearing", "fastener", "pipe", "thread"],
+      "capabilities": ["parametric-source", "brep-output", "step-output"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/gumyr/bd_warehouse",
+        "license": "Apache-2.0",
+        "attribution": "bd_warehouse contributors"
+      }
+    },
+    {
+      "id": "boltsparts",
+      "name": "boltsparts",
+      "description": "Parametric standards-based technical parts data and generators, successor to the archived BOLTS project.",
+      "engines": ["openscad", "freecad"],
+      "categories": ["hardware", "fastener", "standards"],
+      "interfaces": ["bolt", "nut", "washer", "bearing"],
+      "capabilities": ["parametric-source", "standards-data"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/boltsparts/boltsparts",
+        "license": "See upstream",
+        "attribution": "boltsparts contributors"
+      }
+    },
+    {
+      "id": "freecad-parts-library",
+      "name": "FreeCAD Parts Library",
+      "description": "Large collection of FreeCAD and STEP parts; use its index selectively instead of cloning the full repository.",
+      "engines": ["freecad", "step"],
+      "categories": ["hardware", "component", "reference-model"],
+      "interfaces": ["standard-part", "step-part"],
+      "capabilities": ["brep-output", "step-output", "online-index"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/FreeCAD/FreeCAD-library",
+        "license": "CC-BY-3.0",
+        "attribution": "FreeCAD Parts Library contributors"
+      }
+    },
+    {
+      "id": "partcad",
+      "name": "PartCAD",
+      "description": "Package manager and framework for reusable CAD parts, assemblies, requirements, and validation workflows.",
+      "engines": ["python", "openscad", "freecad", "step"],
+      "categories": ["package-manager", "assembly", "validation"],
+      "interfaces": ["part-package", "assembly-package"],
+      "capabilities": ["component-discovery", "package-management", "validation-framework"],
+      "status": "indexed_remote",
+      "source": {
+        "url": "https://github.com/partcad/partcad",
+        "license": "Apache-2.0",
+        "attribution": "PartCAD contributors"
+      }
+    }
+  ]
+}

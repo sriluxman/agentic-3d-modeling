@@ -13,10 +13,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest==9.1.1"]
+dev = ["pytest==9.1.1", "PyYAML==6.0.3"]
 
 [project.scripts]
 agentic-cad = "agentic_cad.cli:main"
+agentic-cad-components = "agentic_cad.catalog:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
