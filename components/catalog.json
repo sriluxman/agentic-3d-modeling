@@ -79,11 +79,19 @@
       "categories": ["joint", "joinery"],
       "interfaces": ["dovetail", "finger-joint", "dowel", "mortise-tenon", "bridle", "scarf"],
       "capabilities": ["parametric-source", "paired-mating-geometry"],
-      "status": "indexed_remote",
+      "status": "automatically_validated",
       "source": {
         "url": "https://github.com/HopefulLlama/JointSCAD",
+        "local_path": "components/vendor/jointscad/DovetailJoint.scad",
+        "version": "447888065b30721267db6011faeaf8e4e95ee5ff",
         "license": "MIT",
         "attribution": "HopefulLlama and JointSCAD contributors"
+      },
+      "evidence": {
+        "automated": "JointSCAD dovetail coupon passes OpenSCAD, Trimesh solid/body checks, and ElegooSlicer without supports.",
+        "model": "models/jointscad_dovetail_coupon.scad",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "physical": "pending"
       }
     },
     {
