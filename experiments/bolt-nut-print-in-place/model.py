@@ -27,7 +27,7 @@ DEFAULTS: dict[str, Any] = {
     "head_across_flats_mm": 45.0,
     "head_height_mm": 12.0,
     "nut_across_flats_mm": 45.0,
-    "nut_height_mm": 15.0,
+    "nut_height_mm": 30.0,  # annotation round 1: doubled from 15 (nut too short)
     "fit_mm": None,  # diametral; None -> max(1.0, 4 x measured print clearance)
 }
 

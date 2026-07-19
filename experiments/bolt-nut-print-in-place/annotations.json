@@ -1,0 +1,20 @@
+{
+ "design": "bolt_nut_print_in_place",
+ "schema_version": 1,
+ "annotations": [
+  {
+   "id": 1,
+   "part": "bolt_nut_plate",
+   "view": "isometric",
+   "note": "the nut is too short can we make it double sized?",
+   "svg_px": [
+    198.5,
+    292.5
+   ],
+   "mm_from_view_center": [
+    7.63,
+    -44.33
+   ]
+  }
+ ]
+}
