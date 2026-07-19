@@ -48,6 +48,16 @@ def _shade(normals_view: np.ndarray) -> list[str]:
     return [f"rgb({r},{g},{b})" for r, g, b in colors]
 
 
+def _subdivided(mesh: trimesh.Trimesh, max_edge: float = 8.0) -> trimesh.Trimesh:
+    """Painter's-algorithm depth sorting misorders huge coplanar triangles,
+    which renders as phantom 'cuts' (a user annotation caught exactly that).
+    Subdividing long edges before sorting removes the artifact."""
+    vertices, faces = trimesh.remesh.subdivide_to_size(
+        mesh.vertices, mesh.faces, max_edge=max_edge, max_iter=6
+    )
+    return trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
+
+
 def _view_polygons(mesh: trimesh.Trimesh, frame: np.ndarray) -> tuple[np.ndarray, list[str]]:
     vertices = mesh.vertices @ frame.T
     faces = mesh.faces
@@ -67,6 +77,7 @@ def render_views_svg(mesh: trimesh.Trimesh, output_path: Path, title: str) -> di
     """Render four orthographic views to one standalone SVG."""
     views = []
     all_bounds = []
+    mesh = _subdivided(mesh)
     for name, frame in _VIEWS:
         polygons, colors = _view_polygons(mesh, frame)
         views.append((name, polygons, colors))

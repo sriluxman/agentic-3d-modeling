@@ -119,12 +119,13 @@ def test_skadis_slide_box_pipeline(tmp_path: Path) -> None:
         enable_freecad=False,
     )
     assert report["status"] == "pass"
-    assert {part["name"] for part in report["parts"]} == {"box_body", "sliding_lid", "t_clip"}
+    assert {part["name"] for part in report["parts"]} == {"box_body", "sliding_lid"}
     # lid slides on TOP along the long axis - the original mechanism
     assert report["parameters"]["lid_style"].startswith("original_top_slide")
+    assert "vendor part, unmodified" in report["parameters"]["print_clip"]
     # clearances come from the physically measured calibration
     assert report["parameters"]["sliding_clearance_mm_per_side"] == 0.25
-    probe = next(c for c in report["design_checks"] if c["name"] == "clip_seat_slots_through_open")
+    probe = next(c for c in report["design_checks"] if c["name"] == "clip_slots_through_open")
     assert probe["status"] == "pass"
-    twist = next(m for m in report["motion_checks"] if m["name"] == "t_clip_insert_and_twist_lock")
+    twist = next(m for m in report["motion_checks"] if m["name"] == "t_clip_insert_from_inside_and_twist")
     assert twist["status"] == "pass" and twist["samples"][-1]["rotation_deg"] == 90.0

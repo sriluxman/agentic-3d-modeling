@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest==9.1.1", "PyYAML==6.0.3"]
+ui = ["notebook>=7.6", "ipython"]
 
 [project.scripts]
 agentic-cad = "agentic_cad.cli:main"
