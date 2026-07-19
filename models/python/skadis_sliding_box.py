@@ -54,10 +54,16 @@ def build_design(profile: dict, params: SkadisBoxParameters = SkadisBoxParameter
         parameters={
             "outer_dimensions_mm": [enclosure.width_mm, enclosure.height_mm, enclosure.depth_mm],
             "wall_mm": enclosure.wall_mm,
-            "lid_style": "raised_perimeter_stackable",
-            "lid_base_thickness_mm": enclosure.lid_thickness_mm,
+            "lid_style": "full_footprint_recessed_stackable",
+            "lid_tongue_thickness_mm": enclosure.lid_thickness_mm,
+            "lid_cover_floor_mm": enclosure.lid_cover_floor_mm,
+            "lid_recess_depth_mm": enclosure.lid_recess_depth_mm,
             "lid_total_thickness_mm": round(
-                enclosure.lid_thickness_mm + enclosure.lid_rim_height_mm, 3
+                enclosure.depth_mm
+                - box.assembled_translation_mm[2]
+                + enclosure.lid_cover_floor_mm
+                + enclosure.lid_recess_depth_mm,
+                3,
             ),
             "sliding_clearance_mm_per_side": sliding_clearance,
             "seat_source": "models/ikea/Clip Seat.step",

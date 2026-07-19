@@ -18,8 +18,8 @@ def test_skadis_box_generation_and_lid_motion(tmp_path: Path) -> None:
     assert report["status"] == "pass"
     assert [part["name"] for part in report["parts"]] == ["box_body", "sliding_lid"]
     assert report["parameters"]["sliding_clearance_mm_per_side"] == 0.15
-    assert report["parameters"]["lid_style"] == "raised_perimeter_stackable"
-    assert report["parameters"]["lid_total_thickness_mm"] == 3.4
+    assert report["parameters"]["lid_style"] == "full_footprint_recessed_stackable"
+    assert report["parameters"]["lid_total_thickness_mm"] == 4.95
     assert report["parameters"]["seat_count"] == 2
     assert report["design_checks"][0]["name"] == "clip_seat_slots_through_open"
     assert report["design_checks"][0]["status"] == "pass"
