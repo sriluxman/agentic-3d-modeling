@@ -30,6 +30,11 @@ class MotionSpec:
     # Required minimum B-rep distance at every sample. 0.0 keeps the check
     # collision-only; a positive value demands measured running clearance.
     min_clearance_mm: float = 0.0
+    # Optional rotation per sample (twist-locks, bayonets): rotations_deg must
+    # be empty or match translations_mm in length; the moving body is rotated
+    # about rotation_axis (origin, direction) before the translation applies.
+    rotations_deg: tuple[float, ...] = ()
+    rotation_axis: tuple[tuple[float, float, float], tuple[float, float, float]] | None = None
 
 
 @dataclass(frozen=True)

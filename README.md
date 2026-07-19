@@ -12,6 +12,7 @@ Reusable, agent-first tooling for generating functional CAD and rejecting bad ge
 - sampled ray-cast **minimum wall thickness** against the part's or profile's printable limit
 - six-axis print-orientation scoring
 - sampled B-rep collision checks for declared assembly motion, now with **measured clearance (mm)** at every sample and an optional demanded minimum
+- **rotation sampling** in motion checks (`MotionSpec.rotations_deg` + `rotation_axis`) for twist-locks, bayonets, and keyed inserts
 - static **clearance bands** (`ClearanceSpec`): a mating fit fails when it interferes, when the gap is below minimum, and when it is loose enough to rattle
 - ElegooSlicer CLI pass using the installed ECC2 machine/process/material presets
 - machine-readable JSON report with explicit `pass`, `fail`, and `not_run` states
@@ -54,7 +55,11 @@ A Python model exposes `build_design(profile, overrides=None) -> DesignSpec` and
 - optional `MotionSpec` paths for sampled interference checks, with `min_clearance_mm` when the motion must keep running clearance;
 - optional `ClearanceSpec` bands for static mating fits (`min_mm`..`max_mm`).
 
-Reference implementations: `models/python/fit_calibration.py` (clearance coupon) and `models/python/cable_clip.py` (clearance band + demanded motion clearance + study-ready parameters; its rounded lips exist because the wall-thickness gate rejected the raw feather-edged cut - the loop working as intended).
+Reference implementations: `models/python/fit_calibration.py` (clearance coupon), `models/python/cable_clip.py` (clearance band + demanded motion clearance + study-ready parameters; its rounded lips exist because the wall-thickness gate rejected the raw feather-edged cut - the loop working as intended), and `models/python/skadis_container.py` (multi-part assembly: sliding-lid container with IKEA Skadis T-clip mounting, twist-lock insertion verified with rotation sampling).
+
+## Interface library
+
+`agentic_cad.interfaces` holds parametric encodings of real-world mounting interfaces, starting with IKEA Skadis (`interfaces/skadis.py`): slot cutters, board coupons for verification, seat bosses to union into designs, and a T-clip replica dimensioned from the vendor reference (its stadium foot exists because the motion check caught the square-cornered foot colliding with the slot's rounded ends). Vendor files under `models/ikea/` stay local-only reference evidence and are not redistributed.
 
 ## Backends
 

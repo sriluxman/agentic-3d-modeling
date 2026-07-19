@@ -12,7 +12,7 @@ Every claim about a design maps to a gate that produces `pass`, `fail`, or `not_
 | "the mesh will slice" | watertight, winding, volume, degeneracy | `evaluate.mesh_checks` |
 | "no hidden geometry corruption" | exact tri/tri self-intersection (transversal) | `integrity.self_intersections` |
 | "walls are printable" | seeded ray-cast thickness vs `min_wall_mm` | `integrity.wall_thickness` |
-| "the parts assemble" | sampled B-rep collision along declared path | `evaluate.motion_check` |
+| "the parts assemble" | sampled B-rep collision along declared path (translations, and rotations for twist-locks/bayonets) | `evaluate.motion_check` |
 | "the fit is right" | measured mm gap in `[min, max]` band | `evaluate.clearance_check` |
 | "the STEP survives interop" | FreeCAD headless round-trip | `freecad.validate_step` |
 | "the slicer accepts it" | ElegooSlicer CLI + G-code metrics | `slicer.slice_stl` |
@@ -54,6 +54,10 @@ This is the difference between "0.2 mm clearance worked once" and "0.1 mm fails 
 2. Automated pass -> print the smallest representative coupon -> physical measurement promotes the design (`physically_validated` in the component catalog).
 3. The slicer and FreeCAD round-trip are release gates for the chosen design, not inner-loop costs.
 
+## Interface library
+
+Recurring real-world interfaces live in `agentic_cad.interfaces` as parametric generators rather than vendored meshes: reference geometry for verification (e.g. a Skadis board coupon), features to union into designs (seat bosses, slot cutters), and mating-part replicas for motion checks (the T-clip). A new project against a known interface starts from these instead of re-deriving dimensions; new interfaces (DIN rail, GoPro mounts, ...) follow the same pattern. Vendor reference files stay local-only evidence with provenance recorded in the module docstring.
+
 ## Module map
 
 ```
@@ -62,6 +66,7 @@ runner.py       orchestrates one design run -> report.json + report.html
 evaluate.py     B-rep, mesh, orientation, motion, clearance gates
 integrity.py    self-intersection + wall thickness engines
 render.py       SVG views + cross-sections
+interfaces/     parametric real-world interfaces (skadis.py: slots, coupons, T-clip)
 raster.py       headless-browser SVG -> PNG
 htmlreport.py   self-contained design review
 study.py        parameter sweeps, gating, ranking

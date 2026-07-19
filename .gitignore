@@ -3,3 +3,5 @@ exports/
 __pycache__/
 .venv/
 *.egg-info/
+# Vendor reference files (printables.com model 256896), local-only
+models/ikea/

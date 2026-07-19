@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 import trimesh
-from build123d import Pos, Shape
+from build123d import Axis, Pos, Shape
 
 from .contracts import ClearanceSpec, MotionSpec, PartSpec
 
@@ -99,23 +99,32 @@ def mesh_checks(path: Path, part: PartSpec) -> tuple[list[dict[str, Any]], dict[
 
 
 def motion_check(spec: MotionSpec) -> dict[str, Any]:
+    rotations: tuple[float, ...] = spec.rotations_deg or (0.0,) * len(spec.translations_mm)
+    if len(rotations) != len(spec.translations_mm):
+        raise ValueError(f"{spec.name}: rotations_deg must match translations_mm in length")
+    if any(rotations) and spec.rotation_axis is None:
+        raise ValueError(f"{spec.name}: rotations_deg requires rotation_axis")
+    axis = Axis(spec.rotation_axis[0], spec.rotation_axis[1]) if spec.rotation_axis else None
+
     samples = []
     worst = 0.0
     tightest = math.inf
-    for translation in spec.translations_mm:
-        placed = Pos(*translation) * spec.moving
+    for translation, angle in zip(spec.translations_mm, rotations):
+        moving = spec.moving.rotate(axis, angle) if axis is not None and angle else spec.moving
+        placed = Pos(*translation) * moving
         intersection = spec.fixed & placed
         volume = float(intersection.volume) if intersection else 0.0
         clearance = float(spec.fixed.distance_to(placed)) if volume == 0.0 else 0.0
         worst = max(worst, volume)
         tightest = min(tightest, clearance)
-        samples.append(
-            {
-                "translation_mm": list(translation),
-                "intersection_volume_mm3": volume,
-                "clearance_mm": clearance,
-            }
-        )
+        sample = {
+            "translation_mm": list(translation),
+            "intersection_volume_mm3": volume,
+            "clearance_mm": clearance,
+        }
+        if angle:
+            sample["rotation_deg"] = angle
+        samples.append(sample)
 
     collision_free = worst <= spec.max_intersection_volume_mm3
     # 1e-9 guard so boundary-exact fits are not decided by float noise
