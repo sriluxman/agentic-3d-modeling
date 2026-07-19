@@ -243,6 +243,28 @@
         "calibration": "profiles/elegoo_cc2_pla.json measured_calibration.xy_clearance_sliding_mm",
         "physical": "The first cube's 0.05 mm rail overlap broke during bed removal. Revision 3 increases the rail to 16 x 8 mm and embeds it 2.0 mm into the India half; revised cube pending physical validation. JointSCAD sliding clearance remains validated at 0.25 mm per side."
       }
+    },
+    {
+      "id": "agentic-parametric-sd-travel-wallet",
+      "name": "Parametric SD Travel Wallet",
+      "description": "Compact five-card tray-and-sleeve wallet with configurable card envelope, support-free print orientations, and a releasable cantilever button latch.",
+      "engines": ["openscad", "python", "mesh"],
+      "categories": ["enclosure", "storage", "assembly", "travel"],
+      "interfaces": ["sliding-sleeve", "cantilever-button-latch", "card-slot-array"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "assembly-collision-check", "exact-interface-coupon", "slicer-time-report"],
+      "status": "automatically_validated",
+      "source": {
+        "local_path": "models/parametric_sd_travel_wallet.scad",
+        "license": "Project internal",
+        "attribution": "agentic-3d-modeling project"
+      },
+      "evidence": {
+        "automated": "The five-card full-size SD tray, roof-down sleeve, and exact latch coupon pass manifold/body and support-free ElegooSlicer checks; the closed assembly collision volume is 0 mm3.",
+        "export": "scripts/export-sd-travel-wallet.ps1",
+        "report": "exports/sd-travel-wallet/wallet-report.json",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "physical": "pending; print and evaluate the exact latch coupon before the production pair"
+      }
     }
   ]
 }
