@@ -8,6 +8,9 @@ $exportDir = Join-Path $root "exports"
 New-Item -ItemType Directory -Force -Path $exportDir | Out-Null
 
 function Invoke-OpenScadExport($output, $partId, $extraArgs = @()) {
+    if (Test-Path -LiteralPath $output) {
+        Remove-Item -LiteralPath $output
+    }
     & $openscad -o $output @extraArgs -D "part_id=$partId" $model
     for ($i = 0; $i -lt 50; $i++) {
         if ((Test-Path $output) -and ((Get-Item $output).Length -gt 0)) {

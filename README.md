@@ -72,3 +72,18 @@ python .\scripts\check-stl.py .\exports\calculated_latch.stl .\exports\calculate
 ```
 
 Print `calculated_latch.stl` and `calculated_striker.stl` flat. The latch handle stays outside; only the tapered cantilever arm enters the striker.
+
+## Fourth Project: Library Cantilever Clip
+
+This experiment uses the included CC BY-NC Simple Snap-Fit Joints Library rather than a new joint design. It follows the library author's tested clip example and exports the clip and insert separately.
+
+```powershell
+.\scripts\export-library-clip.ps1
+python .\scripts\check-stl.py .\exports\library_clip.stl .\exports\library_insert.stl
+```
+
+Print both pieces flat. Push the small insert straight into the open side between the two flexible jaws. See `notes/004_library_clip_test_log.md` before printing.
+
+## Validation
+
+See `docs/validation_pipeline.md` for the staged agentic CAD pipeline and `profiles/elegoo_cc2_pla.json` for the calibration values agents must use instead of inventing printer tolerances.

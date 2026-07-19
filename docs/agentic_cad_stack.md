@@ -73,6 +73,8 @@ flowchart LR
   I --> B
 ```
 
+The detailed pass/fail gate contract is in `docs/validation_pipeline.md`.
+
 ## First Automation Milestones
 
 ### Milestone 1: OpenSCAD Loop
@@ -116,4 +118,3 @@ Do not wait for a special MCP before building. The useful control surface alread
 - Git history.
 
 If a mature FreeCAD MCP becomes available later, it can wrap these same operations. It should not replace the script-first architecture.
-

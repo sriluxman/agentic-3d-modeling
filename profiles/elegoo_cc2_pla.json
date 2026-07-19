@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "printer": {
+    "name": "Elegoo CC 2",
+    "nozzle_diameter_mm": null
+  },
+  "process": {
+    "layer_height_mm": null,
+    "line_width_mm": null,
+    "wall_loops": null
+  },
+  "material": {
+    "type": "PLA",
+    "brand": null,
+    "color": null,
+    "nozzle_temperature_c": null,
+    "bed_temperature_c": null
+  },
+  "measured_calibration": {
+    "xy_clearance_sliding_mm": null,
+    "xy_clearance_snap_mm": null,
+    "hole_compensation_mm": null,
+    "elephants_foot_compensation_mm": null
+  },
+  "notes": "Fill values from the slicer and measured calibration prints. Null means unknown, never assumed."
+}
