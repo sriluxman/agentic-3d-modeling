@@ -20,6 +20,8 @@ The first model is a two-part FDM snap-fit test:
 
 Print the plug and socket separately, then test how the plug slides and snaps into the socket.
 
+Use the `snapfit_v2_*` exports for printing. The first v1 layout had bases under both mating halves, which blocked insertion.
+
 Recommended first material: PETG if available. PLA can work, but flexing tabs may fatigue or snap sooner.
 
 ## Export
@@ -57,3 +59,5 @@ python .\scripts\check-stl.py .\exports\binder_rail.stl .\exports\binder_page.st
 ```
 
 Print `binder_rail.stl` and `binder_page.stl` flat. Try sliding the page spine into the binder groove from one end.
+
+Use the `binder_v2_*` exports for printing. In v2, only the page spine enters the rail; the page body stays outside the binder so it does not collide with the rail wall.

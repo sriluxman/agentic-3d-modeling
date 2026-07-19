@@ -15,15 +15,15 @@ $fn = 48;
 
 part_id = 0;
 
-clearance = 0.30;
+clearance = 0.45;
 beam_width = 10;
 beam_thickness = 2.2;
-beam_length = 32;
-hook_height = 0.8;
+beam_length = 30;
+hook_height = 0.6;
 hook_length = 4.5;
 base_thickness = 3;
 wall = 2.4;
-socket_length = 26;
+socket_length = 28;
 socket_entry_chamfer = 2;
 labels_enabled = false;
 
@@ -41,12 +41,14 @@ module rounded_plate(size, r = 1.2) {
 }
 
 module plug() {
-    plate_x = 48;
+    plate_x = 24;
     plate_y = 22;
 
     rounded_plate([plate_x, plate_y, base_thickness], 1.4);
 
-    translate([8, plate_y / 2 - beam_width / 2, base_thickness]) {
+    // The beam starts at the front edge of the handle so only the free tongue
+    // enters the socket. The handle stays outside and prevents base collision.
+    translate([plate_x - 0.2, plate_y / 2 - beam_width / 2, base_thickness]) {
         cube([beam_length, beam_width, beam_thickness]);
 
         translate([beam_length - hook_length, 0, beam_thickness - 0.15])
@@ -60,15 +62,15 @@ module plug() {
 }
 
 module socket_cutout(inner_w, inner_h) {
-    translate([-0.1, wall, -0.1])
+    translate([-0.1, wall, base_thickness - 0.1])
         cube([socket_length + 0.2, inner_w, inner_h + 0.2]);
 
-    translate([-0.1, wall - 0.1, inner_h - hook_height - clearance])
+    translate([-0.1, wall - 0.1, base_thickness + inner_h - hook_height - clearance])
         cube([socket_entry_chamfer, inner_w + 0.2, hook_height + clearance + 0.4]);
 }
 
 module socket_window(inner_w, inner_h) {
-    translate([socket_length - 8, wall - 0.1, inner_h - hook_height - 0.2])
+    translate([socket_length - 8, wall - 0.1, base_thickness + inner_h - hook_height - 0.2])
         cube([5.5, inner_w + 0.2, hook_height + clearance + 0.5]);
 }
 
@@ -76,13 +78,11 @@ module socket() {
     inner_w = beam_width + 2 * clearance;
     inner_h = beam_thickness + hook_height + 1.1 * clearance;
     outer_w = inner_w + 2 * wall;
-    outer_h = inner_h + wall;
+    outer_h = base_thickness + inner_h + wall;
     plate_x = 44;
     plate_y = outer_w + 8;
 
-    rounded_plate([plate_x, plate_y, base_thickness], 1.4);
-
-    translate([9, plate_y / 2 - outer_w / 2, base_thickness]) {
+    translate([9, plate_y / 2 - outer_w / 2, 0]) {
         difference() {
             cube([socket_length, outer_w, outer_h]);
             socket_cutout(inner_w, inner_h);
@@ -98,7 +98,7 @@ module socket() {
 
 module both_preview() {
     plug();
-    translate([58, 0, 0]) socket();
+    translate([64, 0, 0]) socket();
 }
 
 if (part_id == 1) {

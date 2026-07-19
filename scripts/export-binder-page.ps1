@@ -10,6 +10,8 @@ New-Item -ItemType Directory -Force -Path $exportDir | Out-Null
 & $openscad -o (Join-Path $exportDir "binder_rail.stl") -D "part_id=1" $model
 & $openscad -o (Join-Path $exportDir "binder_page.stl") -D "part_id=2" $model
 & $openscad -o (Join-Path $exportDir "binder_page_preview.png") --imgsize=1400,700 --viewall -D "part_id=0" $model
+& $openscad -o (Join-Path $exportDir "binder_v2_rail.stl") -D "part_id=1" $model
+& $openscad -o (Join-Path $exportDir "binder_v2_page.stl") -D "part_id=2" $model
+& $openscad -o (Join-Path $exportDir "binder_v2_preview.png") --imgsize=1400,700 --viewall -D "part_id=0" $model
 
 Write-Host "Exported binder/page files to $exportDir"
-
