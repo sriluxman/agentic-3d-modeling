@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $PSScriptRoot
 $openscad = "C:\Program Files\OpenSCAD\openscad.exe"
-$model = Join-Path $root "models\snapfit_pair.scad"
+$model = Join-Path $root "models\calculated_cantilever_latch.scad"
 $exportDir = Join-Path $root "exports"
 
 New-Item -ItemType Directory -Force -Path $exportDir | Out-Null
@@ -18,11 +18,8 @@ function Invoke-OpenScadExport($output, $partId, $extraArgs = @()) {
     throw "OpenSCAD did not create expected output: $output"
 }
 
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_plug.stl") 1
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_socket.stl") 2
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_both_preview.png") 0 @("--imgsize=1400,700", "--viewall")
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_v2_plug.stl") 1
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_v2_socket.stl") 2
-Invoke-OpenScadExport (Join-Path $exportDir "snapfit_v2_preview.png") 0 @("--imgsize=1400,700", "--viewall")
+Invoke-OpenScadExport (Join-Path $exportDir "calculated_latch.stl") 1
+Invoke-OpenScadExport (Join-Path $exportDir "calculated_striker.stl") 2
+Invoke-OpenScadExport (Join-Path $exportDir "calculated_latch_preview.png") 0 @("--imgsize=1400,700", "--viewall")
 
-Write-Host "Exported snap-fit files to $exportDir"
+Write-Host "Exported calculated latch files to $exportDir"

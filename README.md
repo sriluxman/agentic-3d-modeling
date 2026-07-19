@@ -61,3 +61,14 @@ python .\scripts\check-stl.py .\exports\binder_rail.stl .\exports\binder_page.st
 Print `binder_rail.stl` and `binder_page.stl` flat. Try sliding the page spine into the binder groove from one end.
 
 Use the `binder_v2_*` exports for printing. In v2, only the page spine enters the rail; the page body stays outside the binder so it does not collide with the rail wall.
+
+## Third Project: Calculated Cantilever Latch
+
+This experiment uses a snap-fit design formula from the reference material instead of eyeballed dimensions.
+
+```powershell
+.\scripts\export-calculated-latch.ps1
+python .\scripts\check-stl.py .\exports\calculated_latch.stl .\exports\calculated_striker.stl
+```
+
+Print `calculated_latch.stl` and `calculated_striker.stl` flat. The latch handle stays outside; only the tapered cantilever arm enters the striker.
