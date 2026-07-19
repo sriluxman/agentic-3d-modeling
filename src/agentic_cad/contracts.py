@@ -26,8 +26,17 @@ class MotionSpec:
 
 
 @dataclass(frozen=True)
+class DesignCheckSpec:
+    name: str
+    passed: bool
+    measured: Any = None
+    expected: Any = None
+
+
+@dataclass(frozen=True)
 class DesignSpec:
     name: str
     parts: tuple[PartSpec, ...]
     parameters: dict[str, Any] = field(default_factory=dict)
     motions: tuple[MotionSpec, ...] = ()
+    checks: tuple[DesignCheckSpec, ...] = ()

@@ -153,6 +153,51 @@
         "license": "Apache-2.0",
         "attribution": "PartCAD contributors"
       }
+    },
+    {
+      "id": "agentic-sliding-lid-box",
+      "name": "Parametric Sliding-Lid Box",
+      "description": "Support-free build123d enclosure with paired lid, calibrated side clearance, finger notch, insertion path, and editable dimensions.",
+      "engines": ["build123d", "python", "step"],
+      "categories": ["enclosure", "container", "component"],
+      "interfaces": ["sliding-lid", "lid-rail", "finger-pull"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "brep-output", "motion-envelope"],
+      "status": "automatically_validated",
+      "source": {
+        "local_path": "src/agentic_cad/components/enclosures.py",
+        "license": "Project internal",
+        "attribution": "agentic-3d-modeling project"
+      },
+      "evidence": {
+        "automated": "SKADIS box composition passes B-rep, STEP round-trip, mesh, sampled lid insertion, and ElegooSlicer checks.",
+        "model": "models/python/skadis_sliding_box.py",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "physical": "pending"
+      }
+    },
+    {
+      "id": "skadis-t-clip-painted",
+      "name": "SKADIS T-Clip System - Painted Board",
+      "description": "Separate printed twist-lock clip and embeddable STEP seat for mounting products to painted IKEA SKADIS boards.",
+      "engines": ["step", "mesh", "build123d", "freecad"],
+      "categories": ["mount", "hardware", "pegboard", "component"],
+      "interfaces": ["skadis-t-clip", "twist-lock-seat", "painted-skadis"],
+      "capabilities": ["brep-output", "paired-mating-geometry", "print-oriented-load-part"],
+      "status": "automatically_validated",
+      "source": {
+        "url": "https://www.printables.com/model/256896-skadis-t-clip-system/",
+        "local_path": "models/ikea/Clip Seat.step",
+        "related_part": "models/ikea/T-Clip for Painted Skadis.stl",
+        "license": "See upstream",
+        "attribution": "Line Arc Line"
+      },
+      "evidence": {
+        "automated": "Source clip mesh is watertight and slices support-free; the seat STEP remains valid, fused, and through-open in the generated box.",
+        "component": "src/agentic_cad/components/skadis.py",
+        "model": "models/python/skadis_sliding_box.py",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "physical": "pending on local printer and board"
+      }
     }
   ]
 }

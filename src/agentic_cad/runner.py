@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
@@ -17,11 +18,18 @@ from .slicer import slice_stl
 
 
 def load_model(path: Path) -> ModuleType:
-    spec = importlib.util.spec_from_file_location("agentic_cad_user_model", path)
+    resolved = path.resolve()
+    module_name = f"agentic_cad_user_model_{path.stem}_{abs(hash(resolved))}"
+    spec = importlib.util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load CAD model from {path}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        sys.modules.pop(module_name, None)
+        raise
     return module
 
 
@@ -46,6 +54,7 @@ def run(
         "parameters": design.parameters,
         "parts": [],
         "motion_checks": [],
+        "design_checks": [],
         "unavailable_checks": [
             {"name": "mesh_self_intersection", "status": "not_run", "reason": "No robust local engine configured"},
             {"name": "minimum_wall_thickness", "status": "not_run", "reason": "No ray/voxel thickness engine configured"},
@@ -54,6 +63,18 @@ def run(
     }
 
     statuses: list[str] = []
+    for design_check in design.checks:
+        result: dict[str, Any] = {
+            "name": design_check.name,
+            "status": "pass" if design_check.passed else "fail",
+        }
+        if design_check.measured is not None:
+            result["measured"] = design_check.measured
+        if design_check.expected is not None:
+            result["expected"] = design_check.expected
+        statuses.append(result["status"])
+        report["design_checks"].append(result)
+
     for part in design.parts:
         step_path = output_dir / f"{part.name}.step"
         stl_path = output_dir / f"{part.name}.stl"
