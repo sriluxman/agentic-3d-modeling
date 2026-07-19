@@ -247,7 +247,7 @@
     {
       "id": "agentic-parametric-sd-travel-wallet",
       "name": "Parametric SD Travel Wallet",
-      "description": "Compact five-card tray-and-sleeve wallet with configurable card envelope, support-free print orientations, and a releasable cantilever button latch.",
+      "description": "Compact configurable tray-and-sleeve wallet with exposed card grips, support-free print orientations, and a releasable cantilever button latch.",
       "engines": ["openscad", "python", "mesh"],
       "categories": ["enclosure", "storage", "assembly", "travel"],
       "interfaces": ["sliding-sleeve", "cantilever-button-latch", "card-slot-array"],
@@ -259,7 +259,7 @@
         "attribution": "agentic-3d-modeling project"
       },
       "evidence": {
-        "automated": "The five-card full-size SD tray, roof-down sleeve, and exact latch coupon pass manifold/body and support-free ElegooSlicer checks; the closed assembly collision volume is 0 mm3.",
+        "automated": "The five- and eight-card full-size SD trays, roof-down sleeves, and exact latch coupon pass manifold/body and support-free ElegooSlicer checks; both closed assembly collision volumes are 0 mm3.",
         "export": "scripts/export-sd-travel-wallet.ps1",
         "report": "exports/sd-travel-wallet/wallet-report.json",
         "profile": "profiles/elegoo_cc2_pla.json",

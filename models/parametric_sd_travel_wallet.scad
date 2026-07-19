@@ -13,6 +13,8 @@ floor_thickness = 1.2;
 flange_thickness = 1.6;
 flange_overhang = 2.0;
 card_top_clearance = 0.8;
+card_exposure = 6.0;
+front_access_drop = 3.0;
 corner_radius = 2.0;
 
 sleeve_clearance = 0.35;
@@ -40,13 +42,15 @@ inner_depth = card_width + 2 * card_side_clearance;
 tray_width = inner_width + 2 * wall;
 tray_depth = inner_depth + 2 * wall;
 floor_z = flange_thickness + floor_thickness;
-tray_height = floor_z + card_height + card_top_clearance;
+card_top = floor_z + card_height;
+tray_wall_height = card_top - card_exposure;
+protected_height = card_top + card_top_clearance;
 
 sleeve_inner_width = tray_width + 2 * sleeve_clearance;
 sleeve_inner_depth = tray_depth + 2 * sleeve_clearance;
 sleeve_outer_width = sleeve_inner_width + 2 * sleeve_wall;
 sleeve_outer_depth = sleeve_inner_depth + 2 * sleeve_wall;
-sleeve_inner_top = tray_height + sleeve_top_clearance;
+sleeve_inner_top = protected_height + sleeve_top_clearance;
 sleeve_top = sleeve_inner_top + sleeve_roof;
 
 eps = 0.05;
@@ -76,10 +80,18 @@ module tongue_cutouts() {
         cube([tongue_width + tongue_slit, cut_depth, tongue_slit]);
 }
 
-module finger_scoop_cut() {
-    translate([0, -tray_depth / 2 - eps, tray_height])
-        rotate([90, 0, 0])
-            cylinder(h=wall + 2 * eps, r=5.2);
+module front_access_cut() {
+    cut_width = tray_width - 2 * corner_radius;
+    translate([
+        -cut_width / 2,
+        -tray_depth / 2 - eps,
+        tray_wall_height - front_access_drop
+    ])
+        cube([
+            cut_width,
+            wall + 2 * eps,
+            front_access_drop + eps
+        ]);
 }
 
 module tray_shell() {
@@ -91,23 +103,23 @@ module tray_shell() {
                 flange_thickness,
                 corner_radius + flange_overhang
             );
-            rounded_prism(tray_width, tray_depth, tray_height, corner_radius);
+            rounded_prism(tray_width, tray_depth, tray_wall_height, corner_radius);
         }
 
         translate([0, 0, floor_z])
             rounded_prism(
                 tray_width - 2 * wall,
                 tray_depth - 2 * wall,
-                tray_height - floor_z + eps,
+                tray_wall_height - floor_z + eps,
                 max(corner_radius - wall, 0.4)
             );
         tongue_cutouts();
-        finger_scoop_cut();
+        front_access_cut();
     }
 }
 
 module dividers() {
-    divider_height = card_height - 1.5;
+    divider_height = tray_wall_height - floor_z;
     for (index = [1 : card_count - 1]) {
         x = -inner_width / 2 + index * slot_width + (index - 1) * divider_thickness;
         translate([x, -inner_depth / 2, floor_z - divider_embed])
@@ -183,7 +195,7 @@ module assembly(show_cards=true) {
 module exploded() {
     color("gold") tray();
     color("deepskyblue", 0.55)
-        translate([0, 0, tray_height + 8]) sleeve();
+        translate([0, 0, protected_height + 8]) sleeve();
     for (index = [0 : card_count - 1]) card_dummy(index);
 }
 

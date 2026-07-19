@@ -10,9 +10,9 @@ $exportDir = Join-Path $root "exports\sd-travel-wallet"
 
 New-Item -ItemType Directory -Force -Path $exportDir | Out-Null
 
-function Export-Part($name, $partId, $expectedBodies = 1) {
+function Export-Part($name, $partId, $cardCount, $expectedBodies = 1) {
     $output = Join-Path $exportDir "$name.stl"
-    & $openscad -o $output -D "part_id=$partId" $model
+    & $openscad -o $output -D "part_id=$partId" -D "card_count=$cardCount" $model
     if ($LASTEXITCODE -ne 0) { throw "OpenSCAD export failed: $name" }
     & $python -m agentic_cad.stl_cli $output `
         --profile $profile `
@@ -22,24 +22,31 @@ function Export-Part($name, $partId, $expectedBodies = 1) {
     if ($LASTEXITCODE -ne 0) { throw "Validation failed: $name" }
 }
 
-Export-Part "sd-wallet-tray" 1
-Export-Part "sd-wallet-sleeve" 2
-Export-Part "latch-preflight-coupon" 6 2
+foreach ($cardCount in @(5, 8)) {
+    Export-Part "sd-wallet-$cardCount-card-tray" 1 $cardCount
+    Export-Part "sd-wallet-$cardCount-card-sleeve" 2 $cardCount
 
-$collision = Join-Path $exportDir "assembly-collision.stl"
-Remove-Item $collision -ErrorAction SilentlyContinue
-& $openscad -o $collision -D "part_id=5" $model 2>&1 | Out-Host
-& $python (Join-Path $root "scripts\check-collision-mesh.py") $collision
-if ($LASTEXITCODE -ne 0) { throw "SD wallet assembly collision detected" }
+    $collision = Join-Path $exportDir "sd-wallet-$cardCount-card-assembly-collision.stl"
+    Remove-Item $collision -ErrorAction SilentlyContinue
+    & $openscad -o $collision -D "part_id=5" -D "card_count=$cardCount" $model 2>&1 | Out-Host
+    & $python (Join-Path $root "scripts\check-collision-mesh.py") $collision
+    if ($LASTEXITCODE -ne 0) { throw "$cardCount-card SD wallet assembly collision detected" }
+}
+
+Export-Part "latch-preflight-coupon" 6 5 2
 
 foreach ($render in @(
-    @{ Name = "print-layout.png"; Part = 0 },
-    @{ Name = "assembly.png"; Part = 3 },
-    @{ Name = "exploded.png"; Part = 4 },
-    @{ Name = "latch-preflight-coupon.png"; Part = 6 }
+    @{ Name = "5-card-print-layout.png"; Part = 0; Count = 5 },
+    @{ Name = "5-card-assembly.png"; Part = 3; Count = 5 },
+    @{ Name = "5-card-exploded.png"; Part = 4; Count = 5 },
+    @{ Name = "8-card-print-layout.png"; Part = 0; Count = 8 },
+    @{ Name = "8-card-assembly.png"; Part = 3; Count = 8 },
+    @{ Name = "8-card-exploded.png"; Part = 4; Count = 8 },
+    @{ Name = "latch-preflight-coupon.png"; Part = 6; Count = 5 }
 )) {
     & $openscad -o (Join-Path $exportDir $render.Name) `
-        --imgsize=1200,800 --viewall -D "part_id=$($render.Part)" $model
+        --imgsize=1200,800 --viewall -D "part_id=$($render.Part)" `
+        -D "card_count=$($render.Count)" $model
     if ($LASTEXITCODE -ne 0) { throw "Preview failed: $($render.Name)" }
 }
 
