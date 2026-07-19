@@ -223,25 +223,25 @@
       }
     },
     {
-      "id": "agentic-india-austria-threaded-cube",
-      "name": "India-Austria Threaded Friendship Cube",
-      "description": "Two flag-faced half-cubes joined by a concealed, clocked trapezoidal screw with a centering collar and an exact fit preflight coupon.",
+      "id": "agentic-india-austria-dovetail-cube",
+      "name": "India-Austria Dovetail Friendship Cube",
+      "description": "Two fully color-banded half-cubes joined by a concealed vertical dovetail that prints upright without supports or repeated color changes.",
       "engines": ["openscad", "python", "mesh", "3mf"],
-      "categories": ["assembly", "thread", "multicolor", "symbolic-object"],
-      "interfaces": ["trapezoidal-thread", "threaded-socket", "centering-collar"],
-      "capabilities": ["parametric-source", "paired-mating-geometry", "assembly-collision-check", "multicolor-3mf", "physical-fit-coupon"],
+      "categories": ["assembly", "sliding-joint", "multicolor", "symbolic-object"],
+      "interfaces": ["vertical-dovetail", "sliding-receiver", "bottom-stop"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "assembly-collision-check", "multicolor-3mf", "calibrated-clearance"],
       "status": "automatically_validated",
       "source": {
-        "local_path": "models/india_austria_threaded_cube.scad",
+        "local_path": "models/india_austria_dovetail_cube.scad",
         "license": "Project internal",
-        "attribution": "agentic-3d-modeling project; BOSL2 trapezoidal threading"
+        "attribution": "agentic-3d-modeling project; JointSCAD dovetail profile"
       },
       "evidence": {
-        "automated": "Both production halves and the exact thread coupon pass manifold/body and support-free ElegooSlicer checks. A 180-degree receiver phase correction yields zero assembled collision volume. The 3MF gate verifies six named material volumes.",
+        "automated": "Both upright production halves pass manifold/body and support-free ElegooSlicer checks. The assembly collision gate verifies the calibrated dovetail and the 3MF gate verifies six full-volume color bands.",
         "export": "scripts/export-india-austria-cube.ps1",
         "profile": "profiles/elegoo_cc2_pla.json",
-        "preflight": "models/india_austria_threaded_cube.scad part_id=5",
-        "physical": "pending cooled coupon result"
+        "calibration": "profiles/elegoo_cc2_pla.json measured_calibration.xy_clearance_sliding_mm",
+        "physical": "JointSCAD profile validated at 0.25 mm per-side clearance; complete cube pending"
       }
     }
   ]
