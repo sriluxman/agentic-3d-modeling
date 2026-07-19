@@ -221,6 +221,28 @@
         "preflight": "Part 7 reproduces both production latch sockets and the BOSL2 double rabbit clip.",
         "physical": "pending"
       }
+    },
+    {
+      "id": "agentic-india-austria-threaded-cube",
+      "name": "India-Austria Threaded Friendship Cube",
+      "description": "Two flag-faced half-cubes joined by a concealed, clocked trapezoidal screw with a centering collar and an exact fit preflight coupon.",
+      "engines": ["openscad", "python", "mesh", "3mf"],
+      "categories": ["assembly", "thread", "multicolor", "symbolic-object"],
+      "interfaces": ["trapezoidal-thread", "threaded-socket", "centering-collar"],
+      "capabilities": ["parametric-source", "paired-mating-geometry", "assembly-collision-check", "multicolor-3mf", "physical-fit-coupon"],
+      "status": "automatically_validated",
+      "source": {
+        "local_path": "models/india_austria_threaded_cube.scad",
+        "license": "Project internal",
+        "attribution": "agentic-3d-modeling project; BOSL2 trapezoidal threading"
+      },
+      "evidence": {
+        "automated": "Both production halves and the exact thread coupon pass manifold/body and support-free ElegooSlicer checks. A 180-degree receiver phase correction yields zero assembled collision volume. The 3MF gate verifies six named material volumes.",
+        "export": "scripts/export-india-austria-cube.ps1",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "preflight": "models/india_austria_threaded_cube.scad part_id=5",
+        "physical": "pending cooled coupon result"
+      }
     }
   ]
 }
