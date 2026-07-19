@@ -79,7 +79,7 @@
       "categories": ["joint", "joinery"],
       "interfaces": ["dovetail", "finger-joint", "dowel", "mortise-tenon", "bridle", "scarf"],
       "capabilities": ["parametric-source", "paired-mating-geometry"],
-      "status": "automatically_validated",
+      "status": "physically_validated",
       "source": {
         "url": "https://github.com/HopefulLlama/JointSCAD",
         "local_path": "components/vendor/jointscad/DovetailJoint.scad",
@@ -91,7 +91,7 @@
         "automated": "JointSCAD dovetail coupon passes OpenSCAD, Trimesh solid/body checks, and ElegooSlicer without supports.",
         "model": "models/jointscad_dovetail_coupon.scad",
         "profile": "profiles/elegoo_cc2_pla.json",
-        "physical": "pending"
+        "physical": "Printed on Elegoo Centauri Carbon 2 in Elegoo PLA+. A 0.15 mm per-side clearance slides acceptably; 0.25 mm is loose; 0.35 mm is loose and wobbles. The dovetail guides motion but does not retain the insert when inverted."
       }
     },
     {

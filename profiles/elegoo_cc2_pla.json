@@ -24,7 +24,9 @@
     "bed_temperature_c": 60
   },
   "measured_calibration": {
-    "xy_clearance_sliding_mm": null,
+    "xy_clearance_sliding_mm": 0.15,
+    "xy_clearance_sliding_basis": "per_side",
+    "xy_clearance_sliding_observation": "JointSCAD dovetail: 0.15 mm slides acceptably; 0.25 mm is loose; 0.35 mm is loose and wobbles. Sliding fit provides no retention when inverted.",
     "xy_clearance_snap_mm": null,
     "hole_compensation_mm": null,
     "elephants_foot_compensation_mm": null
