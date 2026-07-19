@@ -34,7 +34,7 @@ def test_fit_calibration_pipeline(tmp_path: Path) -> None:
     # schema 2 evidence: integrity checks, measured clearance, renders, HTML
     for part in report["parts"]:
         names = {item["name"] for item in part["checks"]}
-        assert {"mesh_self_intersection_free", "minimum_wall_thickness_mm"} <= names
+        assert {"mesh_self_intersection_max_penetration_mm", "minimum_wall_thickness_p05_mm"} <= names
         assert Path(part["renders"]["views"]["path"]).exists()
     for motion in report["motion_checks"]:
         assert "minimum_clearance_mm" in motion

@@ -36,6 +36,12 @@ agentic-cad-study models/python/cable_clip.py --profile profiles/elegoo_cc2_pla.
 
 The study writes `study.json` and a `study.md` table with per-case failed checks, and recommends the best feasible candidate. FreeCAD round-trip and slicing stay out of the inner loop; run them once on the chosen design.
 
+## Experiments
+
+The platform (this repo's `src/`, `docs/`, `tests/`) is separate from actual design projects: those live under `experiments/`, one folder per project containing everything - `project.ipynb` (the step-by-step driver: describe, build, verify, annotate, study, release), `model.py`, reference files, and `outputs/` with renders, reports, STLs, and G-code. Start a new project by copying `experiments/_template/`. Launch with `.venv\Scripts\jupyter.exe notebook` from the experiment folder. Current experiments: `skadis-slide-box`, `skadis-container`, `screw-lid-canister` (platform-generated screw threads), `bolt-nut-print-in-place` (print-in-place threaded pair).
+
+`agentic_cad.threads` generates clean printable trapezoidal threads (helical sweep, horizontal-trimmed ends, deterministic phase math) so mating threads interleave by construction and motion checks can drive the real threaded parts. The integrity gates now measure self-intersection penetration depth (manufacturing-scale gate) and 5th-percentile wall thickness (thread run-outs and chamfer tips don't fail a sound part).
+
 ## Design journey
 
 The full idea-to-product workflow for non-CAD users (intake, 2D concepting, reuse, evidence, annotation, studies, release) is described in `docs/design_journey.md`. Clearances always come from the profile's physically measured calibration (`docs/sliding_fit_calibration.md`): 0.25 mm per side tight-sliding on this printer, cooled - 0.15 cannot insert. OpenSCAD libraries (BOSL2, SnapLib, ...) plug in via `agentic_cad.openscad.render_scad`.

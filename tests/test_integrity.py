@@ -34,8 +34,8 @@ def test_wall_thickness_measures_plate() -> None:
 def test_thin_wall_fails_gate() -> None:
     checks, metrics = integrity_checks(trimesh.creation.box((20, 20, 0.5)), 0.8)
     by_name = {item["name"]: item for item in checks}
-    assert by_name["mesh_self_intersection_free"]["status"] == "pass"
-    assert by_name["minimum_wall_thickness_mm"]["status"] == "fail"
+    assert by_name["mesh_self_intersection_max_penetration_mm"]["status"] == "pass"
+    assert by_name["minimum_wall_thickness_p05_mm"]["status"] == "fail"
     assert metrics["wall_thickness"]["samples_below_minimum"] > 0
 
 

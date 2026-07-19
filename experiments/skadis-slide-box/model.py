@@ -9,7 +9,7 @@ user annotations (annotations.json round 1):
   lid enters through a letter-slot in one end wall at groove level (measured
   on the reference STL - the wall continues above as a bridge).
 - Pin 3: the T-clip is NOT redesigned. Print the vendor STL as-is
-  (models/ikea/T-Clip for Painted Skadis.stl). The replica here is only the
+  (reference/T-Clip for Painted Skadis.stl). The replica here is only the
   motion-check surrogate: vendor bar and stem stack (floor 2.4 + pad 1.0
   + board 5.1 + slack = the vendor's measured 8.65 mm stem), stem/foot sized
   to the profile's measured print clearance (the vendor's 5.15 stem is an
@@ -164,7 +164,7 @@ def build_design(profile: dict, overrides: dict[str, Any] | None = None) -> Desi
             **parameters,
             "lid_style": "original_top_slide_letter_slot_entry",
             "mounting": "bottom_flush_on_board_clips_inserted_from_inside",
-            "print_clip": "models/ikea/T-Clip for Painted Skadis.stl (vendor part, unmodified)",
+            "print_clip": "experiments/skadis-slide-box/reference/T-Clip for Painted Skadis.stl (vendor part, unmodified)",
             "clip_replica_stem_length_mm": stem_length,
             "seat_pitch_mm": SEAT_PITCH,
             "pad_diameter_mm": PAD_DIAMETER,

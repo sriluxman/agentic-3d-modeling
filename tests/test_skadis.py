@@ -73,7 +73,7 @@ def test_rotation_validation() -> None:
 
 def test_skadis_container_pipeline(tmp_path: Path) -> None:
     _, report = run(
-        ROOT / "models" / "python" / "skadis_container.py",
+        ROOT / "experiments" / "skadis-container" / "model.py",
         ROOT / "profiles" / "elegoo_cc2_pla.json",
         tmp_path,
         enable_slicer=False,
@@ -99,7 +99,7 @@ def test_skadis_container_pipeline(tmp_path: Path) -> None:
 def test_container_rejects_impossible_height(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="height_mm too small"):
         run(
-            ROOT / "models" / "python" / "skadis_container.py",
+            ROOT / "experiments" / "skadis-container" / "model.py",
             ROOT / "profiles" / "elegoo_cc2_pla.json",
             tmp_path,
             enable_slicer=False,
@@ -111,7 +111,7 @@ def test_container_rejects_impossible_height(tmp_path: Path) -> None:
 
 def test_skadis_slide_box_pipeline(tmp_path: Path) -> None:
     _, report = run(
-        ROOT / "models" / "python" / "skadis_slide_box.py",
+        ROOT / "experiments" / "skadis-slide-box" / "model.py",
         ROOT / "profiles" / "elegoo_cc2_pla.json",
         tmp_path,
         enable_slicer=False,

@@ -83,7 +83,7 @@ def run(
         step_path = output_dir / f"{part.name}.step"
         stl_path = output_dir / f"{part.name}.stl"
         export_step(part.shape, step_path)
-        export_stl(part.shape, stl_path, tolerance=0.02, angular_tolerance=0.1)
+        export_stl(part.shape, stl_path, tolerance=0.01, angular_tolerance=0.08)
 
         b_checks, b_metrics = brep_checks(part)
         m_checks, m_metrics = mesh_checks(stl_path, part)
