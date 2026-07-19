@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from build123d import Align, Box, Cylinder, Pos, Shape
+from build123d import Align, Box, Pos, Shape
 
 
 @dataclass(frozen=True)
@@ -13,6 +13,10 @@ class SlidingLidBoxParameters:
     wall_mm: float = 2.0
     back_wall_mm: float = 2.0
     lid_thickness_mm: float = 1.6
+    lid_rim_height_mm: float = 1.8
+    lid_rim_width_mm: float = 1.0
+    lid_rim_inset_x_mm: float = 2.0
+    lid_rim_inset_y_mm: float = 2.5
     support_rail_depth_mm: float = 2.5
     front_rail_depth_mm: float = 1.2
 
@@ -36,12 +40,16 @@ def build_sliding_lid_box(
     wall = params.wall_mm
     back_wall = params.back_wall_mm
     lid_thickness = params.lid_thickness_mm
+    rim_height = params.lid_rim_height_mm
+    rim_width = params.lid_rim_width_mm
+    rim_inset_x = params.lid_rim_inset_x_mm
+    rim_inset_y = params.lid_rim_inset_y_mm
     channel_gap = lid_thickness + 2 * sliding_clearance_mm_per_side
     support_rail_thickness = 1.0
     front_rail_thickness = 1.0
     channel_back = depth - front_rail_thickness - channel_gap
 
-    if min(width, height, depth, wall, back_wall, lid_thickness) <= 0:
+    if min(width, height, depth, wall, back_wall, lid_thickness, rim_height, rim_width) <= 0:
         raise ValueError("Sliding-lid box dimensions must be positive")
     if depth <= back_wall + channel_gap + 4:
         raise ValueError("depth_mm leaves no usable container depth")
@@ -75,17 +83,31 @@ def build_sliding_lid_box(
     body -= Pos(wall - 0.05, height - wall - 0.05, channel_back - 0.05) * Box(
         width - 2 * wall + 0.1,
         wall + 0.1,
-        channel_gap + 0.1,
+        depth - channel_back + 0.15,
         align=(Align.MIN, Align.MIN, Align.MIN),
     )
 
     lid_width = width - 2 * wall - 2 * sliding_clearance_mm_per_side
     lid_height = height - wall - sliding_clearance_mm_per_side
+    rim_outer_width = lid_width - 2 * rim_inset_x
+    rim_outer_height = lid_height - 2 * rim_inset_y
+    if min(rim_outer_width - 2 * rim_width, rim_outer_height - 2 * rim_width) <= 0:
+        raise ValueError("Lid rim dimensions leave no open center")
+
     lid = Box(lid_width, lid_height, lid_thickness, align=(Align.MIN, Align.MIN, Align.MIN))
-    lid -= Pos(lid_width / 2, lid_height, -0.1) * Cylinder(
-        5.0,
-        lid_thickness + 0.2,
-        align=(Align.CENTER, Align.CENTER, Align.MIN),
+    rim_z = lid_thickness - 0.05
+    rim_part_height = rim_height + 0.05
+    lid += Pos(rim_inset_x, rim_inset_y, rim_z) * Box(
+        rim_outer_width, rim_width, rim_part_height, align=(Align.MIN, Align.MIN, Align.MIN)
+    )
+    lid += Pos(rim_inset_x, lid_height - rim_inset_y - rim_width, rim_z) * Box(
+        rim_outer_width, rim_width, rim_part_height, align=(Align.MIN, Align.MIN, Align.MIN)
+    )
+    lid += Pos(rim_inset_x, rim_inset_y, rim_z) * Box(
+        rim_width, rim_outer_height, rim_part_height, align=(Align.MIN, Align.MIN, Align.MIN)
+    )
+    lid += Pos(lid_width - rim_inset_x - rim_width, rim_inset_y, rim_z) * Box(
+        rim_width, rim_outer_height, rim_part_height, align=(Align.MIN, Align.MIN, Align.MIN)
     )
 
     assembled = (
@@ -98,7 +120,7 @@ def build_sliding_lid_box(
     return SlidingLidBoxGeometry(
         body=body,
         lid=lid,
-        lid_bbox_mm=(lid_width, lid_height, lid_thickness),
+        lid_bbox_mm=(lid_width, lid_height, lid_thickness + rim_height),
         assembled_translation_mm=assembled,
         insertion_path_mm=path,
     )
