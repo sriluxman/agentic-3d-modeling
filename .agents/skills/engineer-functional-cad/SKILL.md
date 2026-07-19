@@ -19,10 +19,12 @@ Build functional models through a reuse-first engineering loop. Treat a printabl
    - Use OpenSCAD when a proven library already implements the mechanism or the design is naturally constructive and parameter-driven.
    - Use FreeCAD for STEP interoperability, visual inspection, and FEM when structural evidence is justified.
 7. Adapt the selected component minimally. Preserve its source URL, attribution, version, parameters, and license metadata. Experimental use does not remove provenance obligations; do not assume redistribution or commercial permission.
-8. Define each printable body as a `PartSpec`. Define every insertion, sliding, rotation, or assembly path as a `MotionSpec`; a static non-collision check cannot prove assembly.
-9. Run `agentic-cad <model> --profile profiles/elegoo_cc2_pla.json --output <directory>`. Treat `fail` as blocking and `not_run` as missing evidence, not success.
-10. Inspect STEP and STL checks, clearances, collision samples, wall and feature warnings, orientation, and the slicer pass. Revise parameters and rerun until the automated report passes.
-11. Print the smallest representative coupon first. Record measured clearance, failure mode, material, orientation, and profile. Promote a component to `physically_validated` only after a real print succeeds.
+8. Define each printable body as a `PartSpec` (declare `min_wall_mm` only for intentional thin webs). Define every insertion, sliding, rotation, or assembly path as a `MotionSpec` - a static non-collision check cannot prove assembly - and set `min_clearance_mm` when the motion must keep running clearance. Declare every static mating fit as a `ClearanceSpec` band: interference fails, and so does a gap loose enough to rattle. Accept an `overrides` dict in `build_design` and reject unknown keys.
+9. Run `agentic-cad <model> --profile profiles/elegoo_cc2_pla.json --output <directory> --png`. Treat `fail` as blocking and `not_run` as missing evidence, not success.
+10. Look at the evidence, not just the numbers: open the generated `<part>.views.png` and `<part>.sections.png` (or the SVGs / `report.html`). A misplaced boolean or mirrored feature is visible in one glance and invisible in a bounding-box tuple. Then inspect STEP and STL checks, self-intersection and wall-thickness results, measured clearances, collision samples, orientation, and the slicer pass.
+11. When a parameter is uncertain (wall, clearance, opening angle), do not guess-and-pray: run `agentic-cad-study <model> --profile <profile> --set "name=v1,v2,..." --minimize total_volume_mm3` and take the recommended feasible candidate. Read `study.md` for exactly which checks rejected each alternative.
+12. Revise geometry and rerun until the report passes; the run report (`report.json`, `report.html`) is the deliverable alongside the model source.
+13. Print the smallest representative coupon first. Record measured clearance, failure mode, material, orientation, and profile. Promote a component to `physically_validated` only after a real print succeeds.
 
 ## Reuse Decisions
 
