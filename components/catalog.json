@@ -237,11 +237,11 @@
         "attribution": "agentic-3d-modeling project; JointSCAD dovetail profile"
       },
       "evidence": {
-        "automated": "Both upright production halves pass manifold/body and support-free ElegooSlicer checks. The assembly collision gate verifies the calibrated dovetail and the 3MF gate verifies six full-volume color bands.",
+        "automated": "Both upright production halves pass manifold/body and support-free ElegooSlicer checks. The assembly collision gate verifies the calibrated 16 x 8 mm dovetail with a 2 mm structural embed, and the 3MF gate verifies six full-volume color bands.",
         "export": "scripts/export-india-austria-cube.ps1",
         "profile": "profiles/elegoo_cc2_pla.json",
         "calibration": "profiles/elegoo_cc2_pla.json measured_calibration.xy_clearance_sliding_mm",
-        "physical": "JointSCAD profile validated at 0.25 mm per-side clearance; complete cube pending"
+        "physical": "The first cube's 0.05 mm rail overlap broke during bed removal. Revision 3 increases the rail to 16 x 8 mm and embeds it 2.0 mm into the India half; revised cube pending physical validation. JointSCAD sliding clearance remains validated at 0.25 mm per side."
       }
     }
   ]

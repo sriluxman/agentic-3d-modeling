@@ -7,8 +7,10 @@ cube_size = 36;
 half_width = cube_size / 2;
 band_height = cube_size / 3;
 
-dovetail_dimensions = [10, 5, 34.5];
+dovetail_dimensions = [16, 8, 34.5];
 dovetail_clearance = 0.25;
+dovetail_embed = 2;
+dovetail_x = -dovetail_dimensions[0] / 4 - dovetail_embed;
 dovetail_top_gap = cube_size - dovetail_dimensions[2];
 receiver_top = cube_size - dovetail_top_gap + dovetail_clearance;
 eps = 0.05;
@@ -18,7 +20,7 @@ india_green = "#138808";
 austria_red = "#C8102E";
 
 module dovetail_key() {
-    translate([-dovetail_dimensions[0] / 4 - eps, cube_size / 2 - dovetail_dimensions[1] / 2, 0])
+    translate([dovetail_x, cube_size / 2 - dovetail_dimensions[1] / 2, 0])
         dovetailJointA(dovetail_dimensions, 1);
 }
 
@@ -29,7 +31,7 @@ module dovetail_receiver_cut() {
     center_x = dovetail_dimensions[0] / 2;
     center_y = dovetail_dimensions[1] / 2;
 
-    translate([-dovetail_dimensions[0] / 4, cube_size / 2 - dovetail_dimensions[1] / 2, 0])
+    translate([dovetail_x, cube_size / 2 - dovetail_dimensions[1] / 2, 0])
         translate([center_x, center_y, -eps])
             scale([scale_x, scale_y, 1])
                 translate([-center_x, -center_y, 0])
