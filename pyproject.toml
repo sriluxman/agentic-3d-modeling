@@ -10,6 +10,8 @@ requires-python = ">=3.10,<3.13"
 dependencies = [
   "build123d==0.11.1",
   "trimesh==4.12.2",
+  "rtree==1.4.1",
+  "networkx==3.4.2",
 ]
 
 [project.optional-dependencies]
@@ -19,6 +21,7 @@ dev = ["pytest==9.1.1", "PyYAML==6.0.3"]
 agentic-cad = "agentic_cad.cli:main"
 agentic-cad-components = "agentic_cad.catalog:main"
 agentic-cad-stl = "agentic_cad.stl_cli:main"
+agentic-cad-study = "agentic_cad.study:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

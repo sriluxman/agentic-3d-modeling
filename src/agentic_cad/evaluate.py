@@ -8,7 +8,7 @@ import numpy as np
 import trimesh
 from build123d import Pos, Shape
 
-from .contracts import MotionSpec, PartSpec
+from .contracts import ClearanceSpec, MotionSpec, PartSpec
 
 
 def check(name: str, passed: bool, measured: Any = None, expected: Any = None) -> dict[str, Any]:
@@ -101,17 +101,47 @@ def mesh_checks(path: Path, part: PartSpec) -> tuple[list[dict[str, Any]], dict[
 def motion_check(spec: MotionSpec) -> dict[str, Any]:
     samples = []
     worst = 0.0
+    tightest = math.inf
     for translation in spec.translations_mm:
         placed = Pos(*translation) * spec.moving
         intersection = spec.fixed & placed
         volume = float(intersection.volume) if intersection else 0.0
+        clearance = float(spec.fixed.distance_to(placed)) if volume == 0.0 else 0.0
         worst = max(worst, volume)
-        samples.append({"translation_mm": list(translation), "intersection_volume_mm3": volume})
+        tightest = min(tightest, clearance)
+        samples.append(
+            {
+                "translation_mm": list(translation),
+                "intersection_volume_mm3": volume,
+                "clearance_mm": clearance,
+            }
+        )
 
+    collision_free = worst <= spec.max_intersection_volume_mm3
+    # 1e-9 guard so boundary-exact fits are not decided by float noise
+    clearance_ok = tightest >= spec.min_clearance_mm - 1e-9
     return {
         "name": spec.name,
-        "status": "pass" if worst <= spec.max_intersection_volume_mm3 else "fail",
+        "status": "pass" if collision_free and clearance_ok else "fail",
         "maximum_intersection_volume_mm3": worst,
         "allowed_intersection_volume_mm3": spec.max_intersection_volume_mm3,
+        "minimum_clearance_mm": tightest if samples else None,
+        "required_clearance_mm": spec.min_clearance_mm,
         "samples": samples,
+    }
+
+
+def clearance_check(spec: ClearanceSpec) -> dict[str, Any]:
+    intersection = spec.a & spec.b
+    interference = float(intersection.volume) if intersection else 0.0
+    gap = float(spec.a.distance_to(spec.b)) if interference == 0.0 else 0.0
+    within_band = interference == 0.0 and gap >= spec.min_mm - 1e-9
+    if spec.max_mm is not None:
+        within_band = within_band and gap <= spec.max_mm + 1e-9
+    return {
+        "name": spec.name,
+        "status": "pass" if within_band else "fail",
+        "interference_volume_mm3": interference,
+        "measured_gap_mm": gap,
+        "required_gap_mm": [spec.min_mm, spec.max_mm],
     }
