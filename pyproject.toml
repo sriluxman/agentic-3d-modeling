@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-functional-cad"
+version = "0.1.0"
+description = "Agent-first functional CAD generation and evaluation pipeline"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "build123d==0.11.1",
+  "trimesh==4.12.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[project.scripts]
+agentic-cad = "agentic_cad.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,89 +1,42 @@
-# Agentic 3D Modeling
+# Agentic Functional CAD
 
-Small, practical workspace for agent-generated parametric 3D models.
+Reusable, agent-first tooling for generating functional CAD and rejecting bad geometry before printing.
 
-## Current Toolchain
+## Current Loop
 
-- OpenSCAD: `C:\Program Files\OpenSCAD\openscad.exe`
-- FreeCAD command mode: `C:\Users\srilu\AppData\Local\Programs\FreeCAD 1.1\bin\freecadcmd.exe`
-- Git: available on PATH
+- build123d B-rep models in Python
+- STEP and STL export
+- B-rep validity, volume, solid-count, and dimension assertions
+- FreeCAD headless STEP re-import and geometry verification
+- Trimesh watertightness, winding, volume, body-count, and degeneracy checks
+- six-axis print-orientation scoring
+- sampled B-rep collision checks for declared assembly motion
+- ElegooSlicer CLI pass using the installed ECC2 machine/process/material presets
+- machine-readable JSON report with explicit `pass`, `fail`, and `not_run` states
 
-See `docs/agentic_cad_stack.md` for the agentic CAD architecture.
-
-## First Project: Snap-Fit Coupon
-
-The first model is a two-part FDM snap-fit test:
-
-- `plug`: a base with a flexible cantilever tab and small hook.
-- `socket`: a receiver block with a channel and retention window.
-- `both`: preview layout with both parts side by side.
-
-Print the plug and socket separately, then test how the plug slides and snaps into the socket.
-
-Use the `snapfit_v2_*` exports for printing. The first v1 layout had bases under both mating halves, which blocked insertion.
-
-Recommended first material: PETG if available. PLA can work, but flexing tabs may fatigue or snap sooner.
-
-## Export
-
-From PowerShell:
+## Run
 
 ```powershell
-.\scripts\export-openscad.ps1
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\scripts\run-python-cad.ps1
+.\.venv\Scripts\python.exe -m pytest -q
 ```
 
-This exports STL files into `exports\`.
+Artifacts and `report.json` are written under `exports/python/<design>/`.
 
-Then run a basic geometry check:
+## Model Contract
 
-```powershell
-python .\scripts\check-stl.py .\exports\snapfit_plug.stl .\exports\snapfit_socket.stl
-```
+A Python model exposes `build_design(profile) -> DesignSpec` and returns:
 
-## Basic Iteration Loop
+- named `PartSpec` objects with expected dimensions and body counts;
+- declared parameters for traceability;
+- optional `MotionSpec` paths for sampled interference checks.
 
-1. Change parameters in `models\snapfit_pair.scad`.
-2. Export STL.
-3. Slice and print.
-4. Measure fit with calipers.
-5. Record what happened.
-6. Adjust `clearance`, `hook_height`, or `beam_thickness`.
+Use `models/python/fit_calibration.py` as the compact reference implementation.
 
-## Second Project: Binder + Page
+## Backends
 
-This experiment tests a removable page that slides into a small binder rail.
+Python/build123d is the primary mechanical CAD backend. OpenSCAD remains available for proven parametric libraries such as `models/library_cantilever_clip.scad`. FreeCAD command mode remains an interop and future FEM backend.
 
-```powershell
-.\scripts\export-binder-page.ps1
-python .\scripts\check-stl.py .\exports\binder_rail.stl .\exports\binder_page.stl
-```
-
-Print `binder_rail.stl` and `binder_page.stl` flat. Try sliding the page spine into the binder groove from one end.
-
-Use the `binder_v2_*` exports for printing. In v2, only the page spine enters the rail; the page body stays outside the binder so it does not collide with the rail wall.
-
-## Third Project: Calculated Cantilever Latch
-
-This experiment uses a snap-fit design formula from the reference material instead of eyeballed dimensions.
-
-```powershell
-.\scripts\export-calculated-latch.ps1
-python .\scripts\check-stl.py .\exports\calculated_latch.stl .\exports\calculated_striker.stl
-```
-
-Print `calculated_latch.stl` and `calculated_striker.stl` flat. The latch handle stays outside; only the tapered cantilever arm enters the striker.
-
-## Fourth Project: Library Cantilever Clip
-
-This experiment uses the included CC BY-NC Simple Snap-Fit Joints Library rather than a new joint design. It follows the library author's tested clip example and exports the clip and insert separately.
-
-```powershell
-.\scripts\export-library-clip.ps1
-python .\scripts\check-stl.py .\exports\library_clip.stl .\exports\library_insert.stl
-```
-
-Print both pieces flat. Push the small insert straight into the open side between the two flexible jaws. See `notes/004_library_clip_test_log.md` before printing.
-
-## Validation
-
-See `docs/validation_pipeline.md` for the staged agentic CAD pipeline and `profiles/elegoo_cc2_pla.json` for the calibration values agents must use instead of inventing printer tolerances.
+The third-party snap-fit library and design guide are retained under `docs/snapfit-know-hows/` with their CC Attribution-NonCommercial license.
