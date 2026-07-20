@@ -265,6 +265,28 @@
         "profile": "profiles/elegoo_cc2_pla.json",
         "physical": "pending; print and evaluate the exact latch coupon before the production pair"
       }
+    },
+    {
+      "id": "agentic-ikea-canvas-frame-clip",
+      "name": "IKEA Kids Board Canvas Frame Clip",
+      "description": "Symmetric rounded U-clip that spans a wooden easel frame, tapers after the frame, and continues as a narrow two-sided canvas retainer.",
+      "engines": ["openscad", "python", "mesh"],
+      "categories": ["clip", "mount", "art-accessory", "frame"],
+      "interfaces": ["symmetric-frame-wrap", "two-sided-taper", "canvas-retainer"],
+      "capabilities": ["parametric-source", "fit-calibration-coupon", "four-part-print-plate", "slicer-time-report"],
+      "status": "automatically_validated",
+      "source": {
+        "local_path": "models/ikea_canvas_frame_clip.scad",
+        "license": "Project internal",
+        "attribution": "agentic-3d-modeling project"
+      },
+      "evidence": {
+        "automated": "The symmetric single clip, four-clip plate, and three-gap board coupon pass manifold/body and support-free ElegooSlicer checks.",
+        "export": "scripts/export-ikea-canvas-clips.ps1",
+        "report": "exports/ikea-canvas-frame-clips/clip-report.json",
+        "profile": "profiles/elegoo_cc2_pla.json",
+        "physical": "pending; the 3.0, 3.5, and 4.0 mm board gaps require cooled on-board evaluation"
+      }
     }
   ]
 }
